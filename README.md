@@ -1,35 +1,34 @@
-# Arch User Repository (AUR) Packages Repository Template
+# JasonLandbridge AUR Packages
 
-This repository is a template for maintaining [Arch User Repository (AUR)][1] packages automatically using [Renovate][2].
-Check out my [AUR packages repository][3] to see it working.
+This repository is the source of truth for AUR packages maintained by **JasonLandbridge**.
 
-## How it works
+Yes: if CI is healthy and AUR secrets are configured, you should update packages here and let GitHub Actions publish changes to AUR, instead of editing package repos directly on AUR.
 
-Check out [the breakdown on my blog][4] for a step-by-step walkthrough.
-The short version is:
+## Maintained packages
 
-1. Renovate will open PRs to update the `pkgver`
-1. GitHub Actions will run `updpkgsums` and `makepkg --printsrcinfo > .SRCINFO` for each PR
-1. When a PR is merged GitHub Actions will publish the package to the AUR (if you've configured the `AUR_USERNAME`, `AUR_EMAIL` and `AUR_SSH_PRIVATE_KEY` secrets).
+- [`youtube-dl-gui`](https://aur.archlinux.org/packages/youtube-dl-gui) - [repo folder](./youtube-dl-gui)
+- [`omniroute-bin`](https://aur.archlinux.org/packages/omniroute-bin) - [repo folder](./omniroute-bin)
+- [`mcp-linker-bin`](https://aur.archlinux.org/packages/mcp-linker-bin) - [repo folder](./mcp-linker-bin)
 
-## Adding a new package
+## Workflow
 
-1. Add a new directory with the package name
-1. Manually create your `PKGBUILD` and `.SRCINFO`
-1. Add a comment after pkgver with the [Renovate datasource][5] and package name
+1. Edit package files in this repo (`PKGBUILD`, packaging assets, `.SRCINFO`).
+2. Keep Renovate metadata on `pkgver`:
 
+```bash
+pkgver=1.2.3 # renovate: datasource=github-tags depName=owner/repo
 ```
-pkgver=1.2.3 # renovate: datasource=github-tags depName=git/git
-```
+
+3. Open or update a PR to `main`.
+4. CI runs checksum and metadata update flow.
+5. Merge to `main` to publish to AUR.
+
+## References
+
+- [AUR](https://wiki.archlinux.org/title/Arch_User_Repository)
+- [Renovate](https://github.com/apps/renovate)
+- [Maintaining AUR packages with Renovate](https://docs.renovatebot.com/user-stories/maintaining-aur-packages-with-renovate/)
 
 ## License
 
-All code in this repository is licensed under [the MIT license][6].
-See the `license` property in each `PKGBUILD` for the license under which each package is distributed.
-
-[1]: https://wiki.archlinux.org/title/Arch_User_Repository
-[2]: https://github.com/apps/renovate
-[3]: https://github.com/jamieMagee/aur-packages
-[4]: https://jamiemagee.co.uk/blog/maintaining-aur-packages-with-renovate
-[5]: https://docs.renovatebot.com/modules/datasource/
-[6]: https://opensource.org/licenses/MIT
+Repository code is licensed under the [MIT License](./LICENSE.md). Package runtime licensing is defined in each package `PKGBUILD`.

@@ -7,6 +7,31 @@
     ":semanticCommitScope(deps)",
     "helpers:pinGitHubActionDigests"
   ],
+  "schedule": [
+    "0 * * * *"
+  ],
+  "automergeSchedule": [
+    "0 * * * *"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true,
+      "schedule": [
+        "0 * * * *"
+      ],
+      "automergeSchedule": [
+        "0 * * * *"
+      ],
+      "separateMajorMinor": true,
+      "separateMultipleMajor": true,
+      "separateMultipleMinor": true
+    }
+  ],
   "customManagers": [
     {
       "customType": "regex",
