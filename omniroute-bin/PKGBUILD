@@ -2,7 +2,7 @@
 
 pkgname=omniroute-bin
 pkgver=3.7.1 # renovate: datasource=github-tags depName=diegosouzapw/OmniRoute
-pkgrel=2
+pkgrel=3
 pkgdesc="OpenAI-compatible AI gateway with routing, retries, caching, and observability"
 arch=('x86_64')
 url="https://github.com/diegosouzapw/OmniRoute"
@@ -47,9 +47,11 @@ _omniroute_pkgroot() {
 build() {
   local _pkgroot
   local _app_binary
+  local _app_wreq_js_dir
 
   _pkgroot="$(_omniroute_pkgroot)"
   _app_binary="${_pkgroot}/app/node_modules/better-sqlite3/build/Release/better_sqlite3.node"
+  _app_wreq_js_dir="${_pkgroot}/app/node_modules/wreq-js"
 
   cd "${_pkgroot}"
 
@@ -63,6 +65,8 @@ build() {
   mkdir -p "${HOME}" "${npm_config_cache}"
 
   npm install --omit=dev --ignore-scripts --no-audit --no-fund
+  rm -rf "${_app_wreq_js_dir}"
+  npm install --prefix app --omit=dev --ignore-scripts --no-audit --no-fund wreq-js
   npm rebuild better-sqlite3 --build-from-source
   if [[ -f scripts/postinstall.mjs ]]; then
     node scripts/postinstall.mjs
@@ -70,6 +74,11 @@ build() {
 
   [[ -f "${_app_binary}" ]] || {
     printf 'Missing repaired better-sqlite3 binary at %s\n' "${_app_binary}" >&2
+    return 1
+  }
+
+  [[ -f "${_app_wreq_js_dir}/dist/wreq-js.js" ]] || {
+    printf 'Missing required wreq-js ESM entrypoint at %s\n' "${_app_wreq_js_dir}/dist/wreq-js.js" >&2
     return 1
   }
 
