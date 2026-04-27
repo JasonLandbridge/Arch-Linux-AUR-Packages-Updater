@@ -9,10 +9,10 @@
   ],
   "timezone": "Etc/UTC",
   "schedule": [
-    "0 * * * *"
+    "at any time"
   ],
   "automergeSchedule": [
-    "0 * * * *"
+    "at any time"
   ],
   "packageRules": [
     {
@@ -23,10 +23,10 @@
       "automergeType": "pr",
       "platformAutomerge": true,
       "schedule": [
-        "0 * * * *"
+        "at any time"
       ],
       "automergeSchedule": [
-        "0 * * * *"
+        "at any time"
       ],
       "separateMajorMinor": true,
       "separateMultipleMajor": true,

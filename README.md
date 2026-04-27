@@ -23,7 +23,7 @@ pkgver=1.2.3 # renovate: datasource=github-tags depName=owner/repo
 4. CI runs checksum and metadata update flow.
 5. Merge to `main` to publish to AUR.
 
-## References
+## References   
 
 - [AUR](https://wiki.archlinux.org/title/Arch_User_Repository)
 - [Renovate](https://github.com/apps/renovate)
