@@ -19,11 +19,9 @@ _upstream_deb="Brightwing.MCP.Manager_${pkgver}_amd64.deb"
 source=(
   "${_upstream_deb}::https://github.com/Brightwing-Systems-LLC/mcp-manager/releases/download/${_tag}/${_upstream_deb}"
   "LICENSE.upstream::https://raw.githubusercontent.com/Brightwing-Systems-LLC/mcp-manager/${_tag}/LICENSE"
-  'LICENSE'
 )
 sha256sums=(
   '2452b7f957da68eeffbf82f6d64a2bafde7cfc2869dfd07d9624a1696203048a'
-  'SKIP'
   'SKIP'
 )
 
@@ -57,6 +55,9 @@ package() {
   install -Dm644 "$srcdir/LICENSE.upstream" \
     "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
-  install -Dm644 "$srcdir/LICENSE" \
-    "$pkgdir/usr/share/licenses/$pkgname/README.Arch"
+  printf '%s\n' \
+    'This package repackages the upstream Brightwing MCP Manager Debian release for Arch Linux.' \
+    'Upstream project: https://github.com/Brightwing-Systems-LLC/mcp-manager' \
+    'Upstream license: MIT' \
+    > "$pkgdir/usr/share/licenses/$pkgname/README.Arch"
 }

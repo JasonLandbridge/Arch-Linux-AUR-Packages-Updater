@@ -13,9 +13,7 @@ pkgbase = mcp-manager-bin
 	options = !strip
 	source = Brightwing.MCP.Manager_0.3.15_amd64.deb::https://github.com/Brightwing-Systems-LLC/mcp-manager/releases/download/v0.3.15/Brightwing.MCP.Manager_0.3.15_amd64.deb
 	source = LICENSE.upstream::https://raw.githubusercontent.com/Brightwing-Systems-LLC/mcp-manager/v0.3.15/LICENSE
-	source = LICENSE
 	sha256sums = 2452b7f957da68eeffbf82f6d64a2bafde7cfc2869dfd07d9624a1696203048a
-	sha256sums = SKIP
 	sha256sums = SKIP
 
 pkgname = mcp-manager-bin
