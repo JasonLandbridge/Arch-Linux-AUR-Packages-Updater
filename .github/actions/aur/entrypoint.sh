@@ -14,7 +14,8 @@ cd $HOME
 mkdir gh-action
 cd gh-action
 cp -rfv "$GITHUB_WORKSPACE"/.git ./
-cp -fv "$WORKPATH"/* .
+# Copy the package directory contents, including dotfiles like .env.example.
+cp -af "$WORKPATH"/. .
 echo "::endgroup::"
 
 echo "::group::Updating archlinux-keyring"

@@ -14,11 +14,13 @@
   "automergeSchedule": [
     "at any time"
   ],
+  "dependencyDashboardApproval": false,
   "packageRules": [
     {
       "matchManagers": [
         "custom.regex"
       ],
+      "dependencyDashboardApproval": false,
       "automerge": true,
       "automergeType": "pr",
       "platformAutomerge": true,
