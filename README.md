@@ -9,6 +9,7 @@ Yes: if CI is healthy and AUR secrets are configured, you should update packages
 - [`youtube-dl-gui`](https://aur.archlinux.org/packages/youtube-dl-gui) - [repo folder](./youtube-dl-gui)
 - [`omniroute-bin`](https://aur.archlinux.org/packages/omniroute-bin) - [repo folder](./omniroute-bin)
 - [`mcp-linker-bin`](https://aur.archlinux.org/packages/mcp-linker-bin) - [repo folder](./mcp-linker-bin)
+- [`mcpproxy-bin`](https://aur.archlinux.org/packages/mcpproxy-bin) - [repo folder](./mcpproxy-bin)
 
 ## Workflow
 
