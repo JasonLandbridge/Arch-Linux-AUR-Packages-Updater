@@ -11,19 +11,6 @@ Yes: if CI is healthy and AUR secrets are configured, you should update packages
 - [`mcp-linker-bin`](https://aur.archlinux.org/packages/mcp-linker-bin) - [repo folder](./mcp-linker-bin)
 - [`mcpproxy-bin`](https://aur.archlinux.org/packages/mcpproxy-bin) - [repo folder](./mcpproxy-bin)
 
-## Workflow
-
-1. Edit package files in this repo (`PKGBUILD`, packaging assets, `.SRCINFO`).
-2. Keep Renovate metadata on `pkgver`:
-
-```bash
-pkgver=1.2.3 # renovate: datasource=github-tags depName=owner/repo
-```
-
-3. Open or update a PR to `main`.
-4. CI runs checksum and metadata update flow.
-5. Merge to `main` to publish to AUR.
-
 ## References   
 
 - [AUR](https://wiki.archlinux.org/title/Arch_User_Repository)
