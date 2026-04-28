@@ -1,4 +1,4 @@
-# Maintainer: Jason Landbridge <JasonLandbridge at aur dot archlinux dot org>
+# Maintainer: Jason Landbridge & mcpproxy
 
 pkgname=mcpproxy-bin
 pkgver=0.27.1 # renovate: datasource=github-tags depName=smart-mcp-proxy/mcpproxy-go
