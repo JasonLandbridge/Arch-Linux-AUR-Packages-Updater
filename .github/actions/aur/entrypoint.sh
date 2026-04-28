@@ -29,7 +29,18 @@ echo "::endgroup::"
 
 echo "::group::Installing depends using paru"
 source PKGBUILD
-sudo pacman -S --needed --noconfirm "${depends[@]:-}" "${makedepends[@]:-}"
+packages_to_install=()
+if declare -p depends >/dev/null 2>&1; then
+  packages_to_install+=("${depends[@]}")
+fi
+if declare -p makedepends >/dev/null 2>&1; then
+  packages_to_install+=("${makedepends[@]}")
+fi
+if ((${#packages_to_install[@]} > 0)); then
+  sudo pacman -S --needed --noconfirm "${packages_to_install[@]}"
+else
+  echo "No depends or makedepends to install"
+fi
 echo "::endgroup::"
 
 echo "::group::Running makepkg"
