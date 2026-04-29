@@ -11,6 +11,8 @@ on:
 jobs:
   updpkgsums:
     runs-on: ubuntu-latest
+    container:
+      image: archlinux:base-devel
     permissions:
       # In order to make sure that the git-auto-commit-action has the permissions to write to the repository
       # using the repository token, we have to add the write permissions to it.
@@ -22,19 +24,43 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.ref }}
 
-      - name: Find updated package
+      - name: Install Arch packaging tools
         run: |
-          #!/usr/bin/env bash
           set -euxo pipefail
 
-          echo "pkgbuild=$(git diff --name-only origin/main origin/${GITHUB_HEAD_REF} "*PKGBUILD" | head -1 | xargs dirname)" >> $GITHUB_ENV
+          pacman -Syu --noconfirm --needed pacman-contrib git sudo
+          useradd -m builder
+          echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
-      - name: Validate package
+      - name: Find updated package
+        run: |
+          set -euxo pipefail
+
+          echo "pkgbuild=$(git diff --name-only origin/main origin/${GITHUB_HEAD_REF} '*PKGBUILD' | head -1 | xargs dirname)" >> "$GITHUB_ENV"
+
+      - name: Update checksums and .SRCINFO
         if: ${{ env.pkgbuild != '' }}
-        uses: ./.github/actions/aur
-        with:
-          action: 'updpkgsums'
-          pkgname: ${{ env.pkgbuild }}
+        run: |
+          set -euxo pipefail
+
+          workpath="$GITHUB_WORKSPACE/$pkgbuild"
+          buildroot=/home/builder/gh-action
+
+          rm -rf "$buildroot"
+          install -d -o builder -g builder "$buildroot"
+
+          cp -a "$workpath/." "$buildroot/"
+          chown -R builder:builder "$buildroot"
+
+          sudo -u builder bash -lc "
+            set -euxo pipefail
+            cd '$buildroot'
+            updpkgsums
+            makepkg --printsrcinfo > .SRCINFO
+          "
+
+          cp -f "$buildroot/PKGBUILD" "$workpath/PKGBUILD"
+          cp -f "$buildroot/.SRCINFO" "$workpath/.SRCINFO"
 
       - name: Commit
         if: ${{ env.pkgbuild != '' }}
