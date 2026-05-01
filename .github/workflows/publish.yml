@@ -19,9 +19,15 @@ jobs:
       - name: Find updated package
         run: |
           #!/usr/bin/env bash
-          set -euxo pipefail
+          set -euo pipefail
 
-          echo "pkgbuild=$(git diff --name-only HEAD HEAD~1 "*/.SRCINFO" | head -1 | xargs dirname)" >> $GITHUB_ENV
+          pkgbuild="$(git diff --name-only HEAD~1 HEAD -- '*/PKGBUILD' '*/.SRCINFO' \
+            | sed -E 's|/[^/]+$||' \
+            | sort -u \
+            | head -n1)"
+
+          echo "pkgbuild=$pkgbuild" >> "$GITHUB_ENV"
+          echo "Detected pkgbuild: $pkgbuild"
 
       - name: Publish package
         if: ${{ env.pkgbuild != '' }}
