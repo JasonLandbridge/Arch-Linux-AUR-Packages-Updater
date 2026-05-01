@@ -1,6 +1,7 @@
 name: updpkgsums
 
 on:
+  workflow_dispatch:
   pull_request:
     types:
       - opened
