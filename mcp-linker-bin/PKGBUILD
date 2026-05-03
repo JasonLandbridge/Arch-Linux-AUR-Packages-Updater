@@ -1,4 +1,5 @@
 # Maintainer: Jason Landbridge <JasonLandbridge at aur dot archlinux dot org>
+# Packaging repository: https://github.com/JasonLandbridge/Arch-Linux-AUR-Packages-Updater/tree/main/mcp-linker-bin
 
 pkgname=mcp-linker-bin
 pkgver=2.2.0 # renovate: datasource=github-tags depName=milisp/mcp-linker

@@ -1,4 +1,5 @@
 # Maintainer: JasonLandbridge
+# Packaging repository: https://github.com/JasonLandbridge/Arch-Linux-AUR-Packages-Updater/tree/main/omniroute-bin
 
 pkgname=omniroute-bin
 pkgver=3.7.8 # renovate: datasource=github-tags depName=diegosouzapw/OmniRoute

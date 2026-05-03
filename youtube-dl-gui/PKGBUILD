@@ -1,3 +1,5 @@
+# Packaging repository: https://github.com/JasonLandbridge/Arch-Linux-AUR-Packages-Updater/tree/main/youtube-dl-gui
+
 pkgname=youtube-dl-gui
 _pkgname=youtube-dl-gui
 pkgver=2.5.6 # renovate: datasource=git-tags depName=https://github.com/StefanLobbenmeier/youtube-dl-gui
