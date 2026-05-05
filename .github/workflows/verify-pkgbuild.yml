@@ -1,0 +1,50 @@
+name: verify-pkgbuild
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '*/PKGBUILD'
+      - '*/.SRCINFO'
+  push:
+    branches:
+      - main
+    paths:
+      - '*/PKGBUILD'
+      - '*/.SRCINFO'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:base-devel
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Install build tooling
+        run: |
+          set -euxo pipefail
+          pacman -Syu --noconfirm --needed git pacman-contrib
+
+      - name: Verify PKGBUILD sources and SRCINFO
+        run: |
+          set -euxo pipefail
+
+          status=0
+          for pkgbuild in */PKGBUILD; do
+            pkgdir="${pkgbuild%/PKGBUILD}"
+            echo "==> Verifying $pkgdir"
+            makepkg --nobuild --nodeps --verifysource --dir "$pkgdir" || status=1
+
+            generated_srcinfo="$(makepkg --printsrcinfo --dir "$pkgdir")"
+            current_srcinfo="$(cat "$pkgdir/.SRCINFO")"
+
+            if [[ "$generated_srcinfo" != "$current_srcinfo" ]]; then
+              echo "::error::$pkgdir/.SRCINFO is out of date. Regenerate with makepkg --printsrcinfo > .SRCINFO"
+              status=1
+            fi
+          done
+
+          exit "$status"

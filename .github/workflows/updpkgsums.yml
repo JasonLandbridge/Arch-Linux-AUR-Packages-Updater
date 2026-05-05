@@ -6,8 +6,12 @@ on:
     types:
       - opened
       - synchronize
+      - reopened
+      - ready_for_review
     branches:
       - main
+    paths:
+      - '*/PKGBUILD'
 
 jobs:
   updpkgsums:
@@ -15,8 +19,6 @@ jobs:
     container:
       image: archlinux:base-devel
     permissions:
-      # In order to make sure that the git-auto-commit-action has the permissions to write to the repository
-      # using the repository token, we have to add the write permissions to it.
       contents: write
     steps:
       - name: Checkout
@@ -33,41 +35,55 @@ jobs:
           useradd -m builder
           echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
-      - name: Find updated package
+      - name: Find updated packages
         run: |
           set -euxo pipefail
 
-          echo "pkgbuild=$(git diff --name-only origin/main origin/${GITHUB_HEAD_REF} '*PKGBUILD' | head -1 | xargs dirname)" >> "$GITHUB_ENV"
+          base_sha='${{ github.event.pull_request.base.sha }}'
+          head_sha='${{ github.event.pull_request.head.sha }}'
+
+          mapfile -t pkgdirs < <(
+            git diff --name-only "$base_sha" "$head_sha" -- '*/PKGBUILD' \
+              | xargs -r -n1 dirname \
+              | sort -u
+          )
+
+          {
+            echo 'pkgdirs<<EOF'
+            printf '%s\n' "${pkgdirs[@]}"
+            echo 'EOF'
+          } >> "$GITHUB_ENV"
 
       - name: Update checksums and .SRCINFO
-        if: ${{ env.pkgbuild != '' }}
+        if: ${{ env.pkgdirs != '' }}
         run: |
           set -euxo pipefail
 
-          workpath="$GITHUB_WORKSPACE/$pkgbuild"
-          buildroot=/home/builder/gh-action
+          for pkgbuild in $pkgdirs; do
+            workpath="$GITHUB_WORKSPACE/$pkgbuild"
+            buildroot="/home/builder/gh-action-$pkgbuild"
 
-          rm -rf "$buildroot"
-          install -d -o builder -g builder "$buildroot"
+            install -d -o builder -g builder "$buildroot"
+            cp -a "$workpath/." "$buildroot/"
+            chown -R builder:builder "$buildroot"
 
-          cp -a "$workpath/." "$buildroot/"
-          chown -R builder:builder "$buildroot"
+            sudo -u builder bash -lc "
+              set -euxo pipefail
+              cd '$buildroot'
+              updpkgsums
+              makepkg --printsrcinfo > .SRCINFO
+            "
 
-          sudo -u builder bash -lc "
-            set -euxo pipefail
-            cd '$buildroot'
-            updpkgsums
-            makepkg --printsrcinfo > .SRCINFO
-          "
-
-          cp -f "$buildroot/PKGBUILD" "$workpath/PKGBUILD"
-          cp -f "$buildroot/.SRCINFO" "$workpath/.SRCINFO"
+            cp -f "$buildroot/PKGBUILD" "$workpath/PKGBUILD"
+            cp -f "$buildroot/.SRCINFO" "$workpath/.SRCINFO"
+          done
 
       - name: Commit
-        if: ${{ env.pkgbuild != '' }}
+        if: ${{ env.pkgdirs != '' }}
         uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7.1.0
         with:
           file_pattern: '*/PKGBUILD */.SRCINFO'
+          commit_message: 'chore: refresh PKGBUILD checksums and SRCINFO'
           commit_user_name: JasonLandbridge
           commit_user_email: 15127381+JasonLandbridge@users.noreply.github.com
           commit_author: JasonLandbridge <15127381+JasonLandbridge@users.noreply.github.com>
