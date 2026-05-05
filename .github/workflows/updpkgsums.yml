@@ -28,6 +28,7 @@ jobs:
           ref: ${{ github.ref }}
 
       - name: Install Arch packaging tools
+        shell: bash
         run: |
           set -euxo pipefail
 
@@ -36,6 +37,7 @@ jobs:
           echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
       - name: Find updated packages
+        shell: bash
         run: |
           set -euxo pipefail
 
@@ -56,6 +58,7 @@ jobs:
 
       - name: Update checksums and .SRCINFO
         if: ${{ env.pkgdirs != '' }}
+        shell: bash
         run: |
           set -euxo pipefail
 
