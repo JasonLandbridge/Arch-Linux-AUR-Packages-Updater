@@ -48,13 +48,15 @@ jobs:
 
             runuser -u "$build_user" -- makepkg --nobuild --nodeps --verifysource --dir "$pkgdir" || status=1
 
-            generated_srcinfo="$(runuser -u "$build_user" -- makepkg --printsrcinfo --dir "$pkgdir")"
-            current_srcinfo="$(cat "$pkgdir/.SRCINFO")"
+            generated_file="$pkgdir/.SRCINFO.generated"
+            runuser -u "$build_user" -- makepkg --printsrcinfo --dir "$pkgdir" > "$generated_file"
 
-            if [[ "$generated_srcinfo" != "$current_srcinfo" ]]; then
+            if ! diff -u "$pkgdir/.SRCINFO" "$generated_file"; then
               echo "::error::$pkgdir/.SRCINFO is out of date. Regenerate with makepkg --printsrcinfo > .SRCINFO"
               status=1
             fi
+
+            rm -f "$generated_file"
           done
 
           exit "$status"
