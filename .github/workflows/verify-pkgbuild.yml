@@ -34,13 +34,21 @@ jobs:
         run: |
           set -euxo pipefail
 
+          build_user=builduser
+          if ! id -u "$build_user" >/dev/null 2>&1; then
+            useradd --create-home --shell /bin/bash "$build_user"
+          fi
+
           status=0
           for pkgbuild in */PKGBUILD; do
             pkgdir="${pkgbuild%/PKGBUILD}"
             echo "==> Verifying $pkgdir"
-            makepkg --nobuild --nodeps --verifysource --dir "$pkgdir" || status=1
 
-            generated_srcinfo="$(makepkg --printsrcinfo --dir "$pkgdir")"
+            chown -R "$build_user:$build_user" "$pkgdir"
+
+            runuser -u "$build_user" -- makepkg --nobuild --nodeps --verifysource --dir "$pkgdir" || status=1
+
+            generated_srcinfo="$(runuser -u "$build_user" -- makepkg --printsrcinfo --dir "$pkgdir")"
             current_srcinfo="$(cat "$pkgdir/.SRCINFO")"
 
             if [[ "$generated_srcinfo" != "$current_srcinfo" ]]; then
