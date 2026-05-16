@@ -13,6 +13,10 @@ on:
     paths:
       - '*/PKGBUILD'
 
+concurrency:
+  group: updpkgsums-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   updpkgsums:
     runs-on: ubuntu-latest
