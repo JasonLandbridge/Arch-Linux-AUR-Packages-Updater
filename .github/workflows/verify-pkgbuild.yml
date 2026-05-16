@@ -6,7 +6,6 @@ on:
     branches:
       - main
     paths:
-      - '*/PKGBUILD'
       - '*/.SRCINFO'
   push:
     branches:
@@ -14,6 +13,10 @@ on:
     paths:
       - '*/PKGBUILD'
       - '*/.SRCINFO'
+
+concurrency:
+  group: verify-pkgbuild-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   verify:
