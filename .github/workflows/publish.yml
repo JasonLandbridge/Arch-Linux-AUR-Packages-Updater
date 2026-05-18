@@ -2,83 +2,39 @@ name: publish
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - '*/PKGBUILD'
+  workflow_run:
+    workflows: ["verify-pkgbuild"]
+    types: [completed]
 
 permissions:
   contents: read
-  checks: read
 
 jobs:
-  verify-gate:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Wait for verify-pkgbuild check to succeed
-        uses: actions/github-script@v8
-        with:
-          script: |
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-            const ref = context.sha;
-            const timeoutMs = 10 * 60 * 1000;
-            const pollMs = 10000;
-            const started = Date.now();
-
-            while (true) {
-              const { data } = await github.rest.checks.listForRef({
-                owner,
-                repo,
-                ref,
-                per_page: 100,
-              });
-
-              const verifyRuns = data.check_runs.filter((run) => run.name === 'verify');
-
-              if (verifyRuns.length > 0) {
-                const completed = verifyRuns.find((run) => run.status === 'completed');
-                if (completed) {
-                  if (completed.conclusion === 'success') {
-                    core.info(`verify check succeeded: ${completed.html_url}`);
-                    return;
-                  }
-
-                  core.setFailed(`verify check conclusion was ${completed.conclusion}: ${completed.html_url}`);
-                  return;
-                }
-              }
-
-              if (Date.now() - started > timeoutMs) {
-                core.setFailed('Timed out waiting for verify check to complete');
-                return;
-              }
-
-              await new Promise((resolve) => setTimeout(resolve, pollMs));
-            }
-
   publish:
-    needs: verify-gate
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout verified commit
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          fetch-depth: 0
+          fetch-depth: 2
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
       - name: Find updated package
+        shell: bash
         run: |
-          #!/usr/bin/env bash
           set -euo pipefail
 
-          pkgbuild="$(git diff --name-only HEAD~1 HEAD -- '*/PKGBUILD' '*/.SRCINFO' \
+          base="$(git rev-parse HEAD~1)"
+          head="$(git rev-parse HEAD)"
+
+          pkgbuild="$(git diff --name-only "$base" "$head" -- '*/PKGBUILD' '*/.SRCINFO' \
             | sed -E 's|/[^/]+$||' \
             | sort -u \
-            | head -n1)"
+            | head -n1 || true)"
 
           echo "pkgbuild=$pkgbuild" >> "$GITHUB_ENV"
-          echo "Detected pkgbuild: $pkgbuild"
+          echo "Detected pkgbuild: ${pkgbuild:-<none>}"
 
       - name: Publish package
         if: ${{ env.pkgbuild != '' }}
