@@ -8,8 +8,58 @@ on:
     paths:
       - '*/PKGBUILD'
 
+permissions:
+  contents: read
+  checks: read
+
 jobs:
+  verify-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for verify-pkgbuild check to succeed
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const ref = context.sha;
+            const timeoutMs = 10 * 60 * 1000;
+            const pollMs = 10000;
+            const started = Date.now();
+
+            while (true) {
+              const { data } = await github.rest.checks.listForRef({
+                owner,
+                repo,
+                ref,
+                per_page: 100,
+              });
+
+              const verifyRuns = data.check_runs.filter((run) => run.name === 'verify');
+
+              if (verifyRuns.length > 0) {
+                const completed = verifyRuns.find((run) => run.status === 'completed');
+                if (completed) {
+                  if (completed.conclusion === 'success') {
+                    core.info(`verify check succeeded: ${completed.html_url}`);
+                    return;
+                  }
+
+                  core.setFailed(`verify check conclusion was ${completed.conclusion}: ${completed.html_url}`);
+                  return;
+                }
+              }
+
+              if (Date.now() - started > timeoutMs) {
+                core.setFailed('Timed out waiting for verify check to complete');
+                return;
+              }
+
+              await new Promise((resolve) => setTimeout(resolve, pollMs));
+            }
+
   publish:
+    needs: verify-gate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
