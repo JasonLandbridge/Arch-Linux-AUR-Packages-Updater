@@ -6,6 +6,7 @@ on:
     branches:
       - main
     paths:
+      - '*/PKGBUILD'
       - '*/.SRCINFO'
   push:
     branches:
