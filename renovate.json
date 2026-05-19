@@ -32,7 +32,17 @@
       ],
       "separateMajorMinor": true,
       "separateMultipleMajor": true,
-      "separateMultipleMinor": true
+      "separateMultipleMinor": true,
+      "postUpgradeTasks": {
+        "commands": [
+          "makepkg --printsrcinfo"
+        ],
+        "fileFilters": [
+          "{{packageFileDir}}/.SRCINFO"
+        ],
+        "workingDirTemplate": "{{packageFileDir}}",
+        "executionMode": "update"
+      }
     }
   ],
   "customManagers": [
