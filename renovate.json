@@ -35,12 +35,12 @@
       "separateMultipleMinor": true,
       "postUpgradeTasks": {
         "commands": [
-          "makepkg --printsrcinfo"
+          "bash .github/scripts/renovate-refresh-aur-package.sh {{packageFileDir}}"
         ],
         "fileFilters": [
+          "{{packageFileDir}}/PKGBUILD",
           "{{packageFileDir}}/.SRCINFO"
         ],
-        "workingDirTemplate": "{{packageFileDir}}",
         "executionMode": "update"
       }
     }
