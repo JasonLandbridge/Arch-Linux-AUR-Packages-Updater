@@ -18,6 +18,18 @@
   "packageRules": [
     {
       "matchManagers": [
+        "github-actions"
+      ],
+      "matchPackageNames": [
+        "renovatebot/github-action"
+      ],
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "enabled": false
+    },
+    {
+      "matchManagers": [
         "custom.regex"
       ],
       "dependencyDashboardApproval": false,
