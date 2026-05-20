@@ -12,8 +12,8 @@
     "at any time"
   ],
   "automergeSchedule": [
-    "at any time"
-  ],
+    "at any time
+"  ],
   "dependencyDashboardApproval": false,
   "packageRules": [
     {
@@ -22,9 +22,6 @@
       ],
       "matchPackageNames": [
         "renovatebot/github-action"
-      ],
-      "matchUpdateTypes": [
-        "patch"
       ],
       "enabled": false
     },
