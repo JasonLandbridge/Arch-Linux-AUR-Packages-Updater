@@ -29,7 +29,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
-          ref: ${{ github.ref }}
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
 
       - name: Install Arch packaging tools
         shell: bash
@@ -45,11 +45,8 @@ jobs:
         run: |
           set -euxo pipefail
 
-          base_sha='${{ github.event.pull_request.base.sha }}'
-          head_sha='${{ github.event.pull_request.head.sha }}'
-
           mapfile -t pkgdirs < <(
-            git diff --name-only "$base_sha" "$head_sha" -- '*/PKGBUILD' \
+            git diff --name-only origin/${{ github.base_ref || 'main' }}...HEAD -- '*/PKGBUILD' \
               | xargs -r -n1 dirname \
               | sort -u
           )
