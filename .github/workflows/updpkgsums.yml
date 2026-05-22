@@ -24,13 +24,8 @@ jobs:
       image: archlinux:base-devel
     permissions:
       contents: write
+      pull-requests: read
     steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.ref || github.ref }}
-
       - name: Install Arch packaging tools
         shell: bash
         run: |
@@ -40,22 +35,49 @@ jobs:
           useradd -m builder
           echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+
       - name: Find updated packages
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euxo pipefail
 
-          mapfile -t pkgdirs < <(
-            git diff --name-only origin/${{ github.base_ref || 'main' }}...HEAD -- '*/PKGBUILD' \
-              | xargs -r -n1 dirname \
-              | sort -u
-          )
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            python - <<'PY'
+import json, os, urllib.request
+owner = "${{ github.repository_owner }}"
+repo = "${{ github.event.repository.name }}"
+pr = ${{ github.event.pull_request.number }}
+token = os.environ["GH_TOKEN"]
+url = f"https://api.github.com/repos/{owner}/{repo}/pulls/{pr}/files?per_page=100"
+req = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"})
+with urllib.request.urlopen(req) as r:
+    data = json.load(r)
+pkgdirs = sorted({f["filename"].rsplit("/", 1)[0] for f in data if f.get("filename","").endswith("/PKGBUILD")})
+with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as env:
+    env.write("pkgdirs<<EOF\n")
+    env.write("\n".join(pkgdirs))
+    env.write("\nEOF\n")
+PY
+          else
+            mapfile -t pkgdirs < <(
+              git diff --name-only HEAD~1 HEAD -- '*/PKGBUILD' \
+                | xargs -r -n1 dirname \
+                | sort -u
+            )
 
-          {
-            echo 'pkgdirs<<EOF'
-            printf '%s\n' "${pkgdirs[@]}"
-            echo 'EOF'
-          } >> "$GITHUB_ENV"
+            {
+              echo 'pkgdirs<<EOF'
+              printf '%s\n' "${pkgdirs[@]}"
+              echo 'EOF'
+            } >> "$GITHUB_ENV"
+          fi
 
       - name: Update checksums and .SRCINFO
         if: ${{ env.pkgdirs != '' }}
