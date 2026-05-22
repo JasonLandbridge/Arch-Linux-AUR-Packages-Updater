@@ -2,6 +2,12 @@ name: updpkgsums
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '*/PKGBUILD'
+      - '*/.SRCINFO'
   pull_request:
     types:
       - opened
@@ -12,6 +18,7 @@ on:
       - main
     paths:
       - '*/PKGBUILD'
+      - '*/.SRCINFO'
 
 concurrency:
   group: updpkgsums-${{ github.event.pull_request.number || github.ref }}
