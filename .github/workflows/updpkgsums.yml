@@ -58,21 +58,21 @@ jobs:
 
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             python - <<'PY'
-import json, os, urllib.request
-owner = "${{ github.repository_owner }}"
-repo = "${{ github.event.repository.name }}"
-pr = ${{ github.event.pull_request.number }}
-token = os.environ["GH_TOKEN"]
-url = f"https://api.github.com/repos/{owner}/{repo}/pulls/{pr}/files?per_page=100"
-req = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"})
-with urllib.request.urlopen(req) as r:
-    data = json.load(r)
-pkgdirs = sorted({f["filename"].rsplit("/", 1)[0] for f in data if f.get("filename","").endswith("/PKGBUILD")})
-with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as env:
-    env.write("pkgdirs<<EOF\n")
-    env.write("\n".join(pkgdirs))
-    env.write("\nEOF\n")
-PY
+          import json, os, urllib.request
+          owner = "${{ github.repository_owner }}"
+          repo = "${{ github.event.repository.name }}"
+          pr = ${{ github.event.pull_request.number }}
+          token = os.environ["GH_TOKEN"]
+          url = f"https://api.github.com/repos/{owner}/{repo}/pulls/{pr}/files?per_page=100"
+          req = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"})
+          with urllib.request.urlopen(req) as r:
+              data = json.load(r)
+          pkgdirs = sorted({f["filename"].rsplit("/", 1)[0] for f in data if f.get("filename","").endswith("/PKGBUILD")})
+          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as env:
+              env.write("pkgdirs<<EOF\n")
+              env.write("\n".join(pkgdirs))
+              env.write("\nEOF\n")
+          PY
           else
             mapfile -t pkgdirs < <(
               git diff --name-only HEAD~1 HEAD -- '*/PKGBUILD' \
