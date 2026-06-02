@@ -75,8 +75,8 @@ jobs:
                   checkout_ref = pull_request["head"]["ref"]
                   verify_sha = pull_request["head"]["sha"]
               else:
-                  checkout_ref = workflow_run.get("head_branch") or workflow_run.get("head_sha")
                   verify_sha = workflow_run.get("head_sha")
+                  checkout_ref = verify_sha or workflow_run.get("head_branch")
 
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
               output.write(f"checkout_repo={checkout_repo}\n")
