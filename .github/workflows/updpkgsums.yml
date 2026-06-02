@@ -46,7 +46,8 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
-          ref: ${{ github.sha }}
+          repository: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref_name }}
 
       - name: Find updated packages
         shell: bash
@@ -112,7 +113,7 @@ PY
           done
 
       - name: Commit
-        if: ${{ env.pkgdirs != '' }}
+        if: ${{ env.pkgdirs != '' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
         uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7.1.0
         with:
           file_pattern: '*/PKGBUILD */.SRCINFO'
@@ -120,3 +121,4 @@ PY
           commit_user_name: JasonLandbridge
           commit_user_email: 15127381+JasonLandbridge@users.noreply.github.com
           commit_author: JasonLandbridge <15127381+JasonLandbridge@users.noreply.github.com>
+          branch: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref_name }}

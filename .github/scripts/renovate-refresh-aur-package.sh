@@ -10,6 +10,17 @@ case "$pkgdir" in
     ;;
 esac
 
+if [[ ! -d "$pkgdir" ]]; then
+  echo "Package directory does not exist: $pkgdir" >&2
+  exit 2
+fi
+
+echo "Refreshing AUR package metadata for: $pkgdir"
+echo "Working directory: $PWD"
+echo "Docker availability:"
+command -v docker || true
+docker version || true
+
 docker run --rm \
   -v "$PWD":/repo \
   -w "/repo/$pkgdir" \
