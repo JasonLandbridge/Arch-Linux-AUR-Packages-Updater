@@ -49,6 +49,10 @@ jobs:
           repository: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref_name }}
 
+      - name: Mark workspace as safe for Git
+        shell: bash
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Find updated packages
         shell: bash
         env:
@@ -73,6 +77,19 @@ jobs:
               env.write("\n".join(pkgdirs))
               env.write("\nEOF\n")
           PY
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            git fetch origin main
+            mapfile -t pkgdirs < <(
+              git diff --name-only origin/main...HEAD -- '*/PKGBUILD' \
+                | xargs -r -n1 dirname \
+                | sort -u
+            )
+
+            {
+              echo 'pkgdirs<<EOF'
+              printf '%s\n' "${pkgdirs[@]}"
+              echo 'EOF'
+            } >> "$GITHUB_ENV"
           else
             mapfile -t pkgdirs < <(
               git diff --name-only HEAD~1 HEAD -- '*/PKGBUILD' \
@@ -97,6 +114,7 @@ jobs:
             workpath="$GITHUB_WORKSPACE/$pkgbuild"
             buildroot="/home/builder/gh-action-$pkgbuild"
 
+            rm -rf "$buildroot"
             install -d -o builder -g builder "$buildroot"
             cp -a "$workpath/." "$buildroot/"
             chown -R builder:builder "$buildroot"
@@ -112,10 +130,29 @@ jobs:
             cp -f "$buildroot/.SRCINFO" "$workpath/.SRCINFO"
           done
 
-      - name: Mark workspace as safe for Git
-        if: ${{ env.pkgdirs != '' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+      - name: Verify refreshed packages
+        if: ${{ env.pkgdirs != '' }}
         shell: bash
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+        run: |
+          set -euxo pipefail
+
+          for pkgbuild in $pkgdirs; do
+            workpath="$GITHUB_WORKSPACE/$pkgbuild"
+            verifyroot="/home/builder/gh-verify-$pkgbuild"
+
+            rm -rf "$verifyroot"
+            install -d -o builder -g builder "$verifyroot"
+            cp -a "$workpath/." "$verifyroot/"
+            chown -R builder:builder "$verifyroot"
+
+            sudo -u builder bash -lc "
+              set -euxo pipefail
+              cd '$verifyroot'
+              makepkg --nobuild --nodeps --verifysource
+              makepkg --printsrcinfo > .SRCINFO.generated
+              diff -u .SRCINFO .SRCINFO.generated
+            "
+          done
 
       - name: Commit
         if: ${{ env.pkgdirs != '' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
