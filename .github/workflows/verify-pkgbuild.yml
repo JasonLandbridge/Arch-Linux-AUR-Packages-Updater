@@ -2,39 +2,132 @@ name: verify-pkgbuild
 
 on:
   workflow_dispatch:
-  pull_request:
-    branches:
-      - main
-    paths:
-      - '*/PKGBUILD'
-      - '*/.SRCINFO'
-  push:
-    branches:
-      - main
-    paths:
-      - '*/PKGBUILD'
-      - '*/.SRCINFO'
+  workflow_run:
+    workflows:
+      - updpkgsums
+    types:
+      - completed
 
 concurrency:
-  group: verify-pkgbuild-${{ github.event.pull_request.number || github.ref }}
+  group: verify-pkgbuild-${{ github.event.workflow_run.pull_requests[0].number || github.event.workflow_run.head_branch || github.ref }}
   cancel-in-progress: true
 
 jobs:
   verify:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     container:
       image: archlinux:base-devel
+    permissions:
+      contents: read
+      pull-requests: read
+      statuses: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
       - name: Install build tooling
         shell: bash
         run: |
           set -euxo pipefail
-          pacman -Syu --noconfirm --needed git pacman-contrib
+          pacman -Syu --noconfirm --needed git pacman-contrib python
+
+      - name: Resolve verification target
+        id: target
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          set -euxo pipefail
+
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+
+          event_name = os.environ["EVENT_NAME"]
+          repository = os.environ["GITHUB_REPOSITORY"]
+          checkout_repo = repository
+          checkout_ref = os.environ.get("GITHUB_REF_NAME", "")
+          verify_sha = os.environ["GITHUB_SHA"]
+          details_url = f"https://github.com/{repository}/actions/runs/{os.environ['GITHUB_RUN_ID']}"
+
+          with open(os.environ["GITHUB_EVENT_PATH"], "r", encoding="utf-8") as event_file:
+              event = json.load(event_file)
+
+          if event_name == "workflow_run":
+              workflow_run = event["workflow_run"]
+              details_url = workflow_run.get("html_url", details_url)
+              pull_requests = workflow_run.get("pull_requests") or []
+
+              if pull_requests:
+                  token = os.environ["GH_TOKEN"]
+                  request = urllib.request.Request(
+                      pull_requests[0]["url"],
+                      headers={
+                          "Authorization": f"Bearer {token}",
+                          "Accept": "application/vnd.github+json",
+                      },
+                  )
+
+                  with urllib.request.urlopen(request) as response:
+                      pull_request = json.load(response)
+
+                  checkout_repo = pull_request["head"]["repo"]["full_name"]
+                  checkout_ref = pull_request["head"]["ref"]
+                  verify_sha = pull_request["head"]["sha"]
+              else:
+                  checkout_ref = workflow_run.get("head_branch") or workflow_run.get("head_sha")
+                  verify_sha = workflow_run.get("head_sha")
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"checkout_repo={checkout_repo}\n")
+              output.write(f"checkout_ref={checkout_ref}\n")
+              output.write(f"verify_sha={verify_sha}\n")
+              output.write(f"details_url={details_url}\n")
+          PY
+
+      - name: Mark verification pending
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERIFY_SHA: ${{ steps.target.outputs.verify_sha }}
+          DETAILS_URL: ${{ steps.target.outputs.details_url }}
+        run: |
+          set -euxo pipefail
+
+          python - <<'PY' >/tmp/status.json
+          import json
+          import os
+
+          print(json.dumps({
+              "state": "pending",
+              "context": "verify",
+              "description": "Waiting to verify refreshed PKGBUILD metadata",
+              "target_url": os.environ["DETAILS_URL"],
+          }))
+          PY
+
+          curl -fsS \
+            -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/$VERIFY_SHA" \
+            --data @/tmp/status.json
+
+      - name: Checkout latest verified ref
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          repository: ${{ steps.target.outputs.checkout_repo }}
+          ref: ${{ steps.target.outputs.checkout_ref }}
+          fetch-depth: 0
+
+      - name: Mark workspace as safe for Git
+        shell: bash
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Verify PKGBUILD sources and SRCINFO
+        id: verify
+        continue-on-error: true
         shell: bash
         run: |
           set -euxo pipefail
@@ -65,3 +158,46 @@ jobs:
           done
 
           exit "$status"
+
+      - name: Report verification status
+        if: ${{ always() }}
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERIFY_SHA: ${{ steps.target.outputs.verify_sha }}
+          DETAILS_URL: ${{ steps.target.outputs.details_url }}
+          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
+        run: |
+          set -euxo pipefail
+
+          if [[ "$VERIFY_OUTCOME" == "success" ]]; then
+            state=success
+            description="PKGBUILD sources and SRCINFO verified after updpkgsums"
+          else
+            state=failure
+            description="PKGBUILD verification failed after updpkgsums"
+          fi
+
+          STATE="$state" DESCRIPTION="$description" python - <<'PY' >/tmp/status.json
+          import json
+          import os
+
+          print(json.dumps({
+              "state": os.environ["STATE"],
+              "context": "verify",
+              "description": os.environ["DESCRIPTION"],
+              "target_url": os.environ["DETAILS_URL"],
+          }))
+          PY
+
+          curl -fsS \
+            -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/$VERIFY_SHA" \
+            --data @/tmp/status.json
+
+          if [[ "$state" != "success" ]]; then
+            exit 1
+          fi
