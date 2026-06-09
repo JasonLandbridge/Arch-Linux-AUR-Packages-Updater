@@ -3,6 +3,7 @@
 *.tgz
 *.zip
 *.oxt
+*.deb
 
 # signed sources
 *.asc
