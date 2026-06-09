@@ -116,6 +116,13 @@ test_validate_response_payload_accepts_success_json() {
   validate_response_payload "201" "$response_file" "/tmp/example.pkg.tar.zst"
 }
 
+test_private_upload_url_appends_overwrite_query_parameter() {
+  source "$PUBLISH_PRIVATE"
+
+  assert_equals "https://repo.example.test/upload?overwrite=true" "$(private_upload_url "https://repo.example.test/upload")"
+  assert_equals "https://repo.example.test/upload?token=abc&overwrite=true" "$(private_upload_url "https://repo.example.test/upload?token=abc")"
+}
+
 test_validate_response_payload_rejects_http_failure() {
   local response_file status
 
@@ -205,7 +212,7 @@ CURL
   output="$(cat "$PRIVATE_PUBLISH_CURL_ARGS_FILE")"
   assert_contains "Authorization: Bearer test-token" "$output"
   assert_contains "file=@$temp_dir/example.pkg.tar.zst" "$output"
-  assert_contains "https://repo.example.test/upload" "$output"
+  assert_contains "https://repo.example.test/upload?overwrite=true" "$output"
 }
 
 test_find_package_artifacts_lists_pkg_tar_zst_only() {
@@ -227,6 +234,7 @@ run_test "selects AUR by default" test_selects_aur_by_default
 run_test "selects private when .private exists" test_selects_private_when_marker_exists
 run_test "private config required only by private publisher" test_private_config_is_only_required_by_private_publisher
 run_test "validates successful JSON response" test_validate_response_payload_accepts_success_json
+run_test "appends overwrite query parameter" test_private_upload_url_appends_overwrite_query_parameter
 run_test "rejects HTTP failure" test_validate_response_payload_rejects_http_failure
 run_test "rejects empty response" test_validate_response_payload_rejects_empty_response
 run_test "uploads with bearer auth and multipart form" test_upload_uses_bearer_auth_and_multipart_form

@@ -194,13 +194,26 @@ if isinstance(parsed, dict):
 PY
 }
 
+private_upload_url() {
+  local upload_url="$1"
+  local separator="?"
+
+  if [[ "$upload_url" == *\?* ]]; then
+    separator="&"
+  fi
+
+  printf '%s%soverwrite=true\n' "$upload_url" "$separator"
+}
+
 upload_package_artifact() {
   local artifact="$1"
   local curl_bin="${PRIVATE_PUBLISH_CURL_BIN:-curl}"
   local response_file
   local status_code
+  local upload_url
 
   response_file="$(mktemp)"
+  upload_url="$(private_upload_url "$PRIVATE_REPO_UPLOAD_URL")"
 
   log_info "private_upload_start" "artifact=$(basename "$artifact")"
 
@@ -214,7 +227,7 @@ upload_package_artifact() {
       --request POST \
       --header "Authorization: Bearer $PRIVATE_REPO_UPLOAD_TOKEN" \
       --form "file=@${artifact}" \
-      "$PRIVATE_REPO_UPLOAD_URL"
+      "$upload_url"
   )"
 
   validate_response_payload "$status_code" "$response_file" "$artifact"
