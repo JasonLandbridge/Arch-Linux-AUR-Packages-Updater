@@ -125,6 +125,10 @@ jobs:
         shell: bash
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
+      - name: Test publishing scripts
+        shell: bash
+        run: bash .github/tests/test-publishing.sh
+
       - name: Verify PKGBUILD sources and SRCINFO
         id: verify
         continue-on-error: true

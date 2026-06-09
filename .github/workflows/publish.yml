@@ -65,8 +65,18 @@ jobs:
           echo "pkgbuild=$pkgbuild" >> "$GITHUB_ENV"
           echo "$selection package: ${pkgbuild:-<none>}"
 
-      - name: Publish package
+      - name: Select publisher
         if: ${{ env.pkgbuild != '' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          package_publisher="$(bash .github/scripts/select-publisher.sh "$pkgbuild")"
+          echo "package_publisher=$package_publisher" >> "$GITHUB_ENV"
+          echo "Selected publisher for $pkgbuild: $package_publisher"
+
+      - name: Publish package to AUR
+        if: ${{ env.pkgbuild != '' && env.package_publisher == 'aur' }}
         uses: KSXGitHub/github-actions-deploy-aur@da03e160361ce01bf087e790b6ffd196d7dccff7 # v4.1.3
         with:
           pkgname: ${{ env.pkgbuild }}
@@ -77,3 +87,20 @@ jobs:
           commit_username: ${{ secrets.AUR_USERNAME }}
           commit_email: ${{ secrets.AUR_EMAIL }}
           ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+
+      - name: Publish package to private repository
+        if: ${{ env.pkgbuild != '' && env.package_publisher == 'private' }}
+        env:
+          PRIVATE_REPO_UPLOAD_URL: ${{ secrets.PRIVATE_REPO_UPLOAD_URL }}
+          PRIVATE_REPO_UPLOAD_TOKEN: ${{ secrets.PRIVATE_REPO_UPLOAD_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          docker run --rm \
+            --volume "$GITHUB_WORKSPACE:/workspace" \
+            --workdir /workspace \
+            --env PRIVATE_REPO_UPLOAD_URL \
+            --env PRIVATE_REPO_UPLOAD_TOKEN \
+            docker.io/library/archlinux:base-devel \
+            bash .github/scripts/publish-private.sh "$pkgbuild"
