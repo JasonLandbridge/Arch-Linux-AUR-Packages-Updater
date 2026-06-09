@@ -18,6 +18,7 @@ on:
           - tabbyml-cuda-bin
           - tabbyml-vulkan-bin
           - youtube-dl-gui
+          - paseo-desktop-bin
   workflow_run:
     workflows: ["verify-pkgbuild"]
     types: [completed]
