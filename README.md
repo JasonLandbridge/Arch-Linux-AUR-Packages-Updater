@@ -2,14 +2,16 @@
 
 This repository is the source of truth for AUR packages maintained by **JasonLandbridge**.
 
-Yes: if CI is healthy and AUR secrets are configured, you should update packages here and let GitHub Actions publish changes to AUR, instead of editing package repos directly on AUR.
-
 ## Maintained packages
 
 - [`youtube-dl-gui`](https://aur.archlinux.org/packages/youtube-dl-gui) - [repo folder](./youtube-dl-gui)
 - [`omniroute-bin`](https://aur.archlinux.org/packages/omniroute-bin) - [repo folder](./omniroute-bin)
 - [`mcp-linker-bin`](https://aur.archlinux.org/packages/mcp-linker-bin) - [repo folder](./mcp-linker-bin)
 - [`mcpproxy-bin`](https://aur.archlinux.org/packages/mcpproxy-bin) - [repo folder](./mcpproxy-bin)
+- [`mcp-manager-bin`](https://aur.archlinux.org/packages/mcp-manager-bin) - [repo folder](./mcp-manager-bin)
+- [`tabbyml-bin`](https://aur.archlinux.org/packages/tabbyml-bin) - [repo folder](./tabbyml-bin)
+- [`tabbyml-cuda-bin`](https://aur.archlinux.org/packages/tabbyml-cuda-bin) - [repo folder](./tabbyml-cuda-bin)
+- [`tabbyml-vulkan-bin`](https://aur.archlinux.org/packages/tabbyml-vulkan-bin) - [repo folder](./tabbyml-vulkan-bin)
 
 ## References   
 
