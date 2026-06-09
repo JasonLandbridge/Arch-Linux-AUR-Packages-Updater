@@ -2,6 +2,22 @@ name: publish
 
 on:
   workflow_dispatch:
+    inputs:
+      package:
+        description: Package to publish; select auto to detect it from the latest commit
+        required: true
+        default: auto
+        type: choice
+        options:
+          - auto
+          - mcp-linker-bin
+          - mcp-manager-bin
+          - mcpproxy-bin
+          - omniroute-bin
+          - tabbyml-bin
+          - tabbyml-cuda-bin
+          - tabbyml-vulkan-bin
+          - youtube-dl-gui
   workflow_run:
     workflows: ["verify-pkgbuild"]
     types: [completed]
@@ -20,21 +36,34 @@ jobs:
           fetch-depth: 2
           ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
-      - name: Find updated package
+      - name: Select package
+        env:
+          REQUESTED_PACKAGE: ${{ inputs.package || 'auto' }}
         shell: bash
         run: |
           set -euo pipefail
 
-          base="$(git rev-parse HEAD~1)"
-          head="$(git rev-parse HEAD)"
+          if [[ "$REQUESTED_PACKAGE" != "auto" ]]; then
+            pkgbuild="$REQUESTED_PACKAGE"
+            selection="Manually selected"
+          else
+            base="$(git rev-parse HEAD~1)"
+            head="$(git rev-parse HEAD)"
 
-          pkgbuild="$(git diff --name-only "$base" "$head" -- '*/PKGBUILD' '*/.SRCINFO' \
-            | sed -E 's|/[^/]+$||' \
-            | sort -u \
-            | head -n1 || true)"
+            pkgbuild="$(git diff --name-only "$base" "$head" -- '*/PKGBUILD' '*/.SRCINFO' \
+              | sed -E 's|/[^/]+$||' \
+              | sort -u \
+              | head -n1 || true)"
+            selection="Automatically detected"
+          fi
+
+          if [[ -n "$pkgbuild" && ! -f "$pkgbuild/PKGBUILD" ]]; then
+            echo "Package directory does not contain a PKGBUILD: $pkgbuild" >&2
+            exit 1
+          fi
 
           echo "pkgbuild=$pkgbuild" >> "$GITHUB_ENV"
-          echo "Detected pkgbuild: ${pkgbuild:-<none>}"
+          echo "$selection package: ${pkgbuild:-<none>}"
 
       - name: Publish package
         if: ${{ env.pkgbuild != '' }}
