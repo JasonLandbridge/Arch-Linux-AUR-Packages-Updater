@@ -3,7 +3,7 @@
 
 pkgname=tabbyml-vulkan-bin
 pkgver=0.32.0 # renovate: datasource=github-releases depName=TabbyML/tabby
-pkgrel=2
+pkgrel=3
 pkgdesc="Self-hosted AI coding assistant (prebuilt Vulkan binary)"
 arch=('x86_64')
 url="https://github.com/TabbyML/tabby"
@@ -22,8 +22,8 @@ source=(
   "config.toml"
 )
 sha256sums=('33de79ba7de0520bb6b158faaac3c41f0690477f97b4f393f3883320b206113b'
-            '65408048199058b54d6cf7d048361e3fa30308e7e68b40e4e92bed610deaad57'
-            'cae696b2a290de40cb08b423b64a2fd208dfb109640635b223430f3ab46fad04'
+            '0add0c190349ff65fc804d02261c606a7d59235aa8a1a0edf0701b18fbd3c1d6'
+            '3357f3f9f1c6df837a366051201a55e9d5dbfcd6e4627e7565a9f8704481169a'
             '019d34e8cde65c2ea7d198df2d1e0062bdbfa449510b4432fa90800364a64816')
 
 package() {
