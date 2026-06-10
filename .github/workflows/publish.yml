@@ -44,6 +44,18 @@ jobs:
         run: |
           set -euo pipefail
 
+          metadata_snapshot() {
+            local ref="$1"
+            local package_directory="$2"
+
+            for package_file in PKGBUILD .SRCINFO; do
+              git show "$ref:$package_directory/$package_file" 2>/dev/null \
+                | sed -E 's/[[:space:]]+#.*$//' \
+                | grep -E '^[[:space:]]*(epoch|pkgver|pkgrel|source|sha256sums|sha512sums|b2sums|provides)[[:space:]=]' \
+                || true
+            done | sed -E 's/[[:space:]]+/ /g'
+          }
+
           if [[ "$REQUESTED_PACKAGE" != "auto" ]]; then
             pkgbuild="$REQUESTED_PACKAGE"
             selection="Manually selected"
@@ -56,6 +68,16 @@ jobs:
               | sort -u \
               | head -n1 || true)"
             selection="Automatically detected"
+
+            if [[ -n "$pkgbuild" ]]; then
+              before_metadata="$(metadata_snapshot "$base" "$pkgbuild")"
+              after_metadata="$(metadata_snapshot "$head" "$pkgbuild")"
+
+              if [[ "$before_metadata" == "$after_metadata" ]]; then
+                echo "Automatically detected package has no publishable metadata changes: $pkgbuild"
+                pkgbuild=""
+              fi
+            fi
           fi
 
           if [[ -n "$pkgbuild" && ! -f "$pkgbuild/PKGBUILD" ]]; then
