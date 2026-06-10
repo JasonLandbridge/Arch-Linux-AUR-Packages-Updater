@@ -28,6 +28,7 @@
 ## Renovate Contract
 - `renovate.json` only scans files named `PKGBUILD` via `managerFilePatterns: /(^|/)PKGBUILD$/`.
 - The `pkgver` line MUST keep this exact shape: `pkgver=<version> # renovate: datasource=<datasource> depName=<depName>`.
+- Private packages and binary packages are not exempt from the Renovate contract; if Renovate should update them, their `pkgver` line MUST include the metadata comment. For GitHub Release assets, agents SHOULD use `datasource=github-releases` and `depName=<owner>/<repo>`.
 - Agents SHOULD prefer Renovate's built-in version extraction (`extractVersionTemplate` strips an optional leading `v`) over custom version munging.
 
 ## CI Contracts
