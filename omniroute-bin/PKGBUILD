@@ -17,7 +17,7 @@ options=('!strip')
 source=(
   "OmniRoute-${pkgver}.AppImage::https://github.com/diegosouzapw/OmniRoute/releases/download/v${pkgver}/OmniRoute-${pkgver}.AppImage"
 )
-sha256sums=('9c330755db41b1aa5c33aa43d1edf9633c14492b355f30317fd39409c37fd360')
+sha256sums=('ebeb46a3508af21aaddb0ccb08a6f35b35821d6f275631df4f72feb095254dd7')
 
 prepare() {
   chmod +x "${srcdir}/OmniRoute-${pkgver}.AppImage"
