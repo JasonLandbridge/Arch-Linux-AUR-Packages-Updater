@@ -1,6 +1,6 @@
 # Maintainer: huochenghai <huochenghai@gmail.com>
 pkgname="paseo-desktop-bin"
-pkgver=0.1.93 # renovate: datasource=github-releases depName=JasonLandbridge/paseo
+pkgver=0.1.94 # renovate: datasource=github-releases depName=JasonLandbridge/paseo
 pkgrel=1
 pkgdesc="[CUSTOM JASONLANDBRIDGE] - One interface for all your Claude Code, Codex and OpenCode agents."
 arch=("x86_64")
@@ -12,7 +12,7 @@ provides=("paseo=${pkgver}")
 conflicts=(paseo paseo-bin paseo-appimage)
 license=("AGPL-3.0-only")
 source=("${_github_url}/releases/download/v${pkgver}/Paseo-${pkgver}-amd64.deb")
-sha256sums=('e2294d528024fcff6ca7b71dae7c719204802ad9f4dfcebae33019db5abfa2ad')
+sha256sums=('95d6368965fce7602d8382dff94b4394d4700a08130155282cbca400bddbe623')
 
 prepare() {
         ar p Paseo-${pkgver}-amd64.deb data.tar.xz | tar --zstd -x
