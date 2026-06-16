@@ -41,17 +41,7 @@
       ],
       "separateMajorMinor": true,
       "separateMultipleMajor": true,
-      "separateMultipleMinor": true,
-      "postUpgradeTasks": {
-        "commands": [
-          "bash .github/scripts/renovate-refresh-aur-package.sh {{packageFileDir}}"
-        ],
-        "fileFilters": [
-          "{{packageFileDir}}/PKGBUILD",
-          "{{packageFileDir}}/.SRCINFO"
-        ],
-        "executionMode": "update"
-      }
+      "separateMultipleMinor": true
     }
   ],
   "customManagers": [
