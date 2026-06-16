@@ -110,6 +110,7 @@ jobs:
           commit_username: ${{ secrets.AUR_USERNAME }}
           commit_email: ${{ secrets.AUR_EMAIL }}
           ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+          branch: main
 
       - name: Publish package to private repository
         if: ${{ env.pkgbuild != '' && env.package_publisher == 'private' }}
