@@ -119,11 +119,10 @@ jobs:
             cp -a "$workpath/." "$buildroot/"
             chown -R builder:builder "$buildroot"
 
-            sudo -u builder bash -lc "
+            sudo -u builder AUR_REFRESH_ATTEMPTS=18 AUR_REFRESH_DELAY_SECONDS=300 bash -lc "
               set -euxo pipefail
               cd '$buildroot'
-              updpkgsums
-              makepkg --printsrcinfo > .SRCINFO
+              bash '$GITHUB_WORKSPACE/.github/scripts/aur-refresh-metadata.sh' .
             "
 
             cp -f "$buildroot/PKGBUILD" "$workpath/PKGBUILD"
