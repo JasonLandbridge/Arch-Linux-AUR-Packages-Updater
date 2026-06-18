@@ -43,7 +43,7 @@ jobs:
           echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
           repository: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
@@ -119,11 +119,10 @@ jobs:
             cp -a "$workpath/." "$buildroot/"
             chown -R builder:builder "$buildroot"
 
-            sudo -u builder bash -lc "
+            sudo -u builder AUR_REFRESH_ATTEMPTS=18 AUR_REFRESH_DELAY_SECONDS=300 bash -lc "
               set -euxo pipefail
               cd '$buildroot'
-              updpkgsums
-              makepkg --printsrcinfo > .SRCINFO
+              bash '$GITHUB_WORKSPACE/.github/scripts/aur-refresh-metadata.sh' .
             "
 
             cp -f "$buildroot/PKGBUILD" "$workpath/PKGBUILD"
