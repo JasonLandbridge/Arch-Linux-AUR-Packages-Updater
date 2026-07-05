@@ -9,6 +9,7 @@ This repository is the source of truth for AUR packages maintained by **JasonLan
 - [`mcp-linker-bin`](https://aur.archlinux.org/packages/mcp-linker-bin) - [repo folder](./mcp-linker-bin)
 - [`mcpproxy-bin`](https://aur.archlinux.org/packages/mcpproxy-bin) - [repo folder](./mcpproxy-bin)
 - [`mcp-manager-bin`](https://aur.archlinux.org/packages/mcp-manager-bin) - [repo folder](./mcp-manager-bin)
+- [`sefirah-bin`](https://aur.archlinux.org/packages/sefirah-bin) - [repo folder](./sefirah-bin)
 - [`tabbyml-bin`](https://aur.archlinux.org/packages/tabbyml-bin) - [repo folder](./tabbyml-bin)
 - [`tabbyml-cuda-bin`](https://aur.archlinux.org/packages/tabbyml-cuda-bin) - [repo folder](./tabbyml-cuda-bin)
 - [`tabbyml-vulkan-bin`](https://aur.archlinux.org/packages/tabbyml-vulkan-bin) - [repo folder](./tabbyml-vulkan-bin)

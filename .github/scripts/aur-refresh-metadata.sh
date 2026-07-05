@@ -71,6 +71,41 @@ run_with_retry() {
   done
 }
 
+check_github_release_assets() {
+  local line value url
+  local missing=0
+  local checked=0
+
+  echo "::group::Checking GitHub release asset URLs"
+  while IFS= read -r line; do
+    [[ "$line" =~ ^[[:space:]]*source(_[A-Za-z0-9_]+)?[[:space:]]*= ]] || continue
+
+    value="${line#*=}"
+    value="${value#${value%%[![:space:]]*}}"
+    url="${value##*::}"
+
+    [[ "$url" == https://github.com/*/releases/download/* ]] || continue
+
+    checked=$((checked + 1))
+    echo "Checking $url"
+    if ! curl -fsIL --retry 3 --retry-all-errors --connect-timeout 20 --max-time 120 "$url" >/dev/null; then
+      echo "::error::Required GitHub release asset is not downloadable: $url" >&2
+      missing=1
+    fi
+  done < <(makepkg --printsrcinfo)
+  echo "::endgroup::"
+
+  if ((checked == 0)); then
+    echo "No GitHub release asset URLs found in PKGBUILD sources."
+  fi
+
+  if ((missing != 0)); then
+    echo "::error::One or more required GitHub release assets are missing. This usually means Renovate selected a tag/release before upstream uploaded the package assets needed by this PKGBUILD, or upstream published an incomplete release. Rebase/retry only after the missing assets exist upstream." >&2
+    return 1
+  fi
+}
+
+check_github_release_assets
 run_with_retry "Updating checksums on PKGBUILD" updpkgsums
 run_with_retry "Verifying source availability and checksums" makepkg --nobuild --nodeps --verifysource
 makepkg --printsrcinfo > .SRCINFO
