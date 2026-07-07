@@ -94,25 +94,33 @@ jobs:
         run: |
           set -euxo pipefail
 
-          python - <<'PY' >/tmp/status.json
+          python - <<'PY'
           import json
           import os
+          import urllib.request
 
-          print(json.dumps({
-              "state": "pending",
-              "context": "verify",
-              "description": "Waiting to verify refreshed PKGBUILD metadata",
-              "target_url": os.environ["DETAILS_URL"],
-          }))
+          details_url = os.environ["DETAILS_URL"]
+          verify_sha = os.environ["VERIFY_SHA"]
+          token = os.environ["GH_TOKEN"]
+          repo = os.environ["GITHUB_REPOSITORY"]
+          api_url = f"https://api.github.com/repos/{repo}/statuses/{verify_sha}"
+
+          headers = {
+              "Authorization": f"Bearer {token}",
+              "Accept": "application/vnd.github+json",
+              "X-GitHub-Api-Version": "2022-11-28",
+          }
+
+          for context in ("verify", "updpkgsums"):
+              data = json.dumps({
+                  "state": "pending",
+                  "context": context,
+                  "description": "Waiting to verify refreshed PKGBUILD metadata",
+                  "target_url": details_url,
+              }).encode()
+              req = urllib.request.Request(api_url, data=data, headers=headers, method="POST")
+              urllib.request.urlopen(req)
           PY
-
-          curl -fsS \
-            -X POST \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/$VERIFY_SHA" \
-            --data @/tmp/status.json
 
       - name: Checkout latest verified ref
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -182,26 +190,35 @@ jobs:
             description="PKGBUILD verification failed after updpkgsums"
           fi
 
-          STATE="$state" DESCRIPTION="$description" python - <<'PY' >/tmp/status.json
+          STATE="$state" DESCRIPTION="$description" python - <<'PY'
           import json
           import os
+          import urllib.request
 
-          print(json.dumps({
-              "state": os.environ["STATE"],
-              "context": "verify",
-              "description": os.environ["DESCRIPTION"],
-              "target_url": os.environ["DETAILS_URL"],
-          }))
+          state = os.environ["STATE"]
+          description = os.environ["DESCRIPTION"]
+          details_url = os.environ["DETAILS_URL"]
+          verify_sha = os.environ["VERIFY_SHA"]
+          token = os.environ["GH_TOKEN"]
+          repo = os.environ["GITHUB_REPOSITORY"]
+          api_url = f"https://api.github.com/repos/{repo}/statuses/{verify_sha}"
+
+          headers = {
+              "Authorization": f"Bearer {token}",
+              "Accept": "application/vnd.github+json",
+              "X-GitHub-Api-Version": "2022-11-28",
+          }
+
+          for context in ("verify", "updpkgsums"):
+              data = json.dumps({
+                  "state": state,
+                  "context": context,
+                  "description": description,
+                  "target_url": details_url,
+              }).encode()
+              req = urllib.request.Request(api_url, data=data, headers=headers, method="POST")
+              urllib.request.urlopen(req)
+
+          if state != "success":
+              exit(1)
           PY
-
-          curl -fsS \
-            -X POST \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/$VERIFY_SHA" \
-            --data @/tmp/status.json
-
-          if [[ "$state" != "success" ]]; then
-            exit 1
-          fi
