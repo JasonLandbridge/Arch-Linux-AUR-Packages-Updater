@@ -1,6 +1,6 @@
 # Maintainer: Jason Landbridge <jason@xiomax.nl>
 pkgname=superset-desktop-bin
-pkgver=1.13.2 # renovate: datasource=github-releases depName=JasonLandbridge/superset extractVersionTemplate=^desktop-v(?<version>.*)$
+pkgver=1.13.1 # renovate: datasource=github-releases depName=JasonLandbridge/superset extractVersionTemplate=^desktop-v(?<version>.*)$
 pkgrel=1
 pkgdesc="[CUSTOM JASONLANDBRIDGE] - Run an army of Claude Code, Codex, and other CLI coding agents across isolated git worktrees"
 arch=('x86_64')
@@ -12,7 +12,7 @@ conflicts=(superset-desktop)
 options=(!strip !debug)
 _appimage="superset-${pkgver}-x86_64.AppImage"
 source=("${_appimage}::https://github.com/JasonLandbridge/superset/releases/download/desktop-v${pkgver}/${_appimage}")
-sha256sums=('105ff29879f18048016637de86a265059cb0fc06a5510b7f5103b7b1b165ea19')
+sha256sums=('87c8ba05db90dd49b79c01c7c9f8e24be5d2e136a8597af07dcdae94b371dc9c')
 noextract=("${_appimage}")
 
 prepare() {

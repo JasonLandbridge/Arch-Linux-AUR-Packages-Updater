@@ -1,18 +1,18 @@
 pkgbase = superset-desktop-bin
 	pkgdesc = [CUSTOM JASONLANDBRIDGE] - Run an army of Claude Code, Codex, and other CLI coding agents across isolated git worktrees
-	pkgver = 1.13.2
+	pkgver = 1.13.1
 	pkgrel = 1
 	url = https://github.com/JasonLandbridge/superset
 	arch = x86_64
 	license = Elastic-2.0
 	depends = fuse2
 	depends = hicolor-icon-theme
-	provides = superset-desktop=1.13.2
+	provides = superset-desktop=1.13.1
 	conflicts = superset-desktop
-	noextract = superset-1.13.2-x86_64.AppImage
+	noextract = superset-1.13.1-x86_64.AppImage
 	options = !strip
 	options = !debug
-	source = superset-1.13.2-x86_64.AppImage::https://github.com/JasonLandbridge/superset/releases/download/desktop-v1.13.2/superset-1.13.2-x86_64.AppImage
-	sha256sums = 105ff29879f18048016637de86a265059cb0fc06a5510b7f5103b7b1b165ea19
+	source = superset-1.13.1-x86_64.AppImage::https://github.com/JasonLandbridge/superset/releases/download/desktop-v1.13.1/superset-1.13.1-x86_64.AppImage
+	sha256sums = 87c8ba05db90dd49b79c01c7c9f8e24be5d2e136a8597af07dcdae94b371dc9c
 
 pkgname = superset-desktop-bin
