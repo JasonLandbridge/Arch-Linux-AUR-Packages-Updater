@@ -31,7 +31,6 @@ on:
 
 permissions:
   contents: read
-  actions: write
 
 jobs:
   publish:
@@ -94,16 +93,6 @@ jobs:
 
           echo "pkgbuild=$pkgbuild" >> "$GITHUB_ENV"
           echo "$selection package: ${pkgbuild:-<none>}"
-
-      - name: Rename run to show package
-        if: ${{ env.pkgbuild != '' }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          gh api -X PATCH "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" \
-            -f "name=publish $pkgbuild"
 
       - name: Select publisher
         if: ${{ env.pkgbuild != '' }}
