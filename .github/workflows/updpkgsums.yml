@@ -16,8 +16,6 @@ on:
       - ready_for_review
     branches:
       - main
-    paths:
-      - '*/PKGBUILD'
       - '*/.SRCINFO'
 
 concurrency:
