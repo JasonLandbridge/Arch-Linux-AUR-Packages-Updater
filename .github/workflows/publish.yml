@@ -20,6 +20,8 @@ on:
           - tabbyml-vulkan-bin
           - youtube-dl-gui
           - paseo-desktop-bin
+          - qdrant
+          - qdrant-bin
   workflow_run:
     workflows: ["verify-pkgbuild"]
     types: [completed]
