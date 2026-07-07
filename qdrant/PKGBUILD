@@ -13,7 +13,7 @@ makedepends=('cargo' 'cmake' 'mold' 'clang' 'protobuf')
 source=(
   "${pkgname}-${pkgver}.tar.gz::https://github.com/qdrant/qdrant/archive/v${pkgver}.tar.gz"
 )
-sha256sums=('6ee985c23a8290bfa1b3792723f599274e37cd8fefe615e669860689ed883c95')
+sha256sums=('32012fab5334b10f20fec5b41a9e9907f9b232cb78d55faa8c1fe6c8f8535629')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
