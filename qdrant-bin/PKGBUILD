@@ -3,7 +3,7 @@
 
 _pkgname=qdrant
 pkgname="${_pkgname}-bin"
-pkgver=1.17.0 # renovate: datasource=github-releases depName=qdrant/qdrant
+pkgver=1.18.2 # renovate: datasource=github-releases depName=qdrant/qdrant
 pkgrel=1
 pkgdesc="Vector Database for the next generation of AI applications"
 arch=('x86_64')
