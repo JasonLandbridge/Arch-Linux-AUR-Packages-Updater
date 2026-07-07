@@ -1,5 +1,7 @@
 name: publish
 
+run-name: ${{ github.event_name == 'workflow_dispatch' && format('publish {0}', inputs.package) || 'publish' }}
+
 on:
   workflow_dispatch:
     inputs:
