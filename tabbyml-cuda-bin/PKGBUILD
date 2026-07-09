@@ -2,7 +2,7 @@
 # Packaging repository: https://github.com/JasonLandbridge/Arch-Linux-AUR-Packages-Updater/tree/main/tabbyml-cuda-bin
 
 pkgname=tabbyml-cuda-bin
-pkgver=0.32.0 # renovate: datasource=github-releases depName=TabbyML/tabby
+pkgver=0.32.0 # renovate: datasource=github-releases depName=TabbyML/tabby extractVersion=^v?(?<version>.*)$
 pkgrel=3
 pkgdesc="Self-hosted AI coding assistant (prebuilt CUDA binary)"
 arch=('x86_64')
