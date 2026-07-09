@@ -13,6 +13,6 @@ pkgbase = superset-desktop-bin
 	options = !strip
 	options = !debug
 	source = superset-1.13.1-x86_64.AppImage::https://github.com/JasonLandbridge/superset/releases/download/desktop-v1.13.1/superset-1.13.1-x86_64.AppImage
-	sha256sums = 87c8ba05db90dd49b79c01c7c9f8e24be5d2e136a8597af07dcdae94b371dc9c
+	sha256sums = 7a5eee0dadb7b91a56b0c82386ceb076b9b966ed213e8f2a9ed9b71b7c360358
 
 pkgname = superset-desktop-bin
