@@ -124,7 +124,7 @@ build_package() {
   copy_package_to_build_directory "$package_directory" "$build_directory"
   install_package_dependencies "$build_directory"
 
-  runuser -u builder -- bash -lc "cd '$build_directory' && makepkg --cleanbuild --force --noconfirm"
+  runuser -u builder -- bash -lc "cd '$build_directory' && updpkgsums && makepkg --cleanbuild --force --noconfirm"
 
   log_info "build_complete" "package=$package_directory build_directory=$build_directory"
 }
