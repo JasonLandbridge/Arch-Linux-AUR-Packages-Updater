@@ -1,6 +1,6 @@
 # Maintainer: Jason Landbridge <jason@xiomax.nl>
 pkgname=superset-desktop-bin
-pkgver=1.13.1 # renovate: datasource=github-releases depName=JasonLandbridge/superset extractVersionTemplate=^desktop-v(?<version>.*)$
+pkgver=1.13.1 # renovate: datasource=github-releases depName=JasonLandbridge/superset extractVersion=^desktop-v(?<version>.*)$
 pkgrel=1
 pkgdesc="[CUSTOM JASONLANDBRIDGE] - Run an army of Claude Code, Codex, and other CLI coding agents across isolated git worktrees"
 arch=('x86_64')
