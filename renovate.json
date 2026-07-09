@@ -30,7 +30,7 @@
         "custom.regex"
       ],
       "dependencyDashboardApproval": false,
-      "minimumReleaseAge": "2 hours",
+      "minimumReleaseAge": "0 days",
       "internalChecksFilter": "strict",
       "automerge": true,
       "automergeType": "pr",
