@@ -44,6 +44,12 @@
       "separateMajorMinor": true,
       "separateMultipleMajor": true,
       "separateMultipleMinor": true
+    },
+    {
+      "matchPackageNames": [
+        "JasonLandbridge/superset"
+      ],
+      "extractVersionTemplate": "^desktop-v?(?<version>.*)$"
     }
   ],
   "customManagers": [
