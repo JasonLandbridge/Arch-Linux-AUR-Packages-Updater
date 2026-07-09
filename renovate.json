@@ -44,12 +44,6 @@
       "separateMajorMinor": true,
       "separateMultipleMajor": true,
       "separateMultipleMinor": true
-    },
-    {
-      "matchDepNames": [
-        "JasonLandbridge/superset"
-      ],
-      "extractVersionTemplate": "^desktop-v(?<version>.*)$"
     }
   ],
   "customManagers": [
@@ -60,8 +54,7 @@
       ],
       "matchStrings": [
         "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: extractVersion=(?<extractVersion>.*))?"
-      ],
-      "extractVersionTemplate": "^v?(?<version>.*)$"
+      ]
     }
   ]
 }
