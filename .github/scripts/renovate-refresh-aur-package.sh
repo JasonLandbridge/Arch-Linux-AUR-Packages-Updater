@@ -29,4 +29,4 @@ docker run --rm \
 pacman -Syu --noconfirm --needed pacman-contrib sudo
 useradd --create-home --shell /bin/bash builder
 chown -R builder:builder '$pkgdir'
-sudo -u builder AUR_REFRESH_ATTEMPTS=18 AUR_REFRESH_DELAY_SECONDS=300 bash .github/scripts/aur-refresh-metadata.sh '$pkgdir'"
+sudo -u builder AUR_REFRESH_ATTEMPTS=3 AUR_REFRESH_DELAY_SECONDS=60 bash .github/scripts/aur-refresh-metadata.sh '$pkgdir'"

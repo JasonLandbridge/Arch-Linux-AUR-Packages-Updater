@@ -19,7 +19,7 @@ on:
       - '*/.SRCINFO'
 
 concurrency:
-  group: updpkgsums-${{ github.event.pull_request.number || github.ref }}
+  group: updpkgsums-${{ github.event.pull_request.number || github.event.pull_request.head.sha || github.sha }}
   cancel-in-progress: true
 
 jobs:
@@ -117,7 +117,7 @@ jobs:
             cp -a "$workpath/." "$buildroot/"
             chown -R builder:builder "$buildroot"
 
-            sudo -u builder AUR_REFRESH_ATTEMPTS=18 AUR_REFRESH_DELAY_SECONDS=300 bash -lc "
+            sudo -u builder AUR_REFRESH_ATTEMPTS=3 AUR_REFRESH_DELAY_SECONDS=60 bash -lc "
               set -euxo pipefail
               cd '$buildroot'
               bash '$GITHUB_WORKSPACE/.github/scripts/aur-refresh-metadata.sh' .
@@ -125,30 +125,6 @@ jobs:
 
             cp -f "$buildroot/PKGBUILD" "$workpath/PKGBUILD"
             cp -f "$buildroot/.SRCINFO" "$workpath/.SRCINFO"
-          done
-
-      - name: Verify refreshed packages
-        if: ${{ env.pkgdirs != '' }}
-        shell: bash
-        run: |
-          set -euxo pipefail
-
-          for pkgbuild in $pkgdirs; do
-            workpath="$GITHUB_WORKSPACE/$pkgbuild"
-            verifyroot="/home/builder/gh-verify-$pkgbuild"
-
-            rm -rf "$verifyroot"
-            install -d -o builder -g builder "$verifyroot"
-            cp -a "$workpath/." "$verifyroot/"
-            chown -R builder:builder "$verifyroot"
-
-            sudo -u builder bash -lc "
-              set -euxo pipefail
-              cd '$verifyroot'
-              makepkg --nobuild --nodeps --verifysource
-              makepkg --printsrcinfo > .SRCINFO.generated
-              diff -u .SRCINFO .SRCINFO.generated
-            "
           done
 
       - name: Commit

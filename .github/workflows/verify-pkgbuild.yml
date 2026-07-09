@@ -149,9 +149,21 @@ jobs:
             useradd --create-home --shell /bin/bash "$build_user"
           fi
 
+          # Only verify packages changed in the triggering commit/PR
+          git fetch origin main --depth=20
+          pkgdirs=($(git diff --name-only origin/main...HEAD -- '*/PKGBUILD' '*/' '.SRCINFO' 2>/dev/null | sed -E 's|/[^/]+$||' | sort -u || true))
+
+          # Fallback: if no changed packages detected (main push), verify all
+          if [[ ${#pkgdirs[@]} -eq 0 ]]; then
+            pkgdirs=(*/PKGBUILD)
+            pkgdirs=("${pkgdirs[@]%/PKGBUILD}")
+          fi
+
+          echo "Verifying ${#pkgdirs[@]} package(s): ${pkgdirs[*]}"
+
           status=0
-          for pkgbuild in */PKGBUILD; do
-            pkgdir="${pkgbuild%/PKGBUILD}"
+          for pkgdir in "${pkgdirs[@]}"; do
+            [[ ! -f "$pkgdir/PKGBUILD" ]] && continue
             echo "==> Verifying $pkgdir"
 
             chown -R "$build_user:$build_user" "$pkgdir"

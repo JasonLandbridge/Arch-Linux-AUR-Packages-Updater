@@ -28,8 +28,8 @@ if [[ ! -f PKGBUILD ]]; then
   exit 2
 fi
 
-attempts="${AUR_REFRESH_ATTEMPTS:-18}"
-delay_seconds="${AUR_REFRESH_DELAY_SECONDS:-300}"
+attempts="${AUR_REFRESH_ATTEMPTS:-3}"
+delay_seconds="${AUR_REFRESH_DELAY_SECONDS:-60}"
 
 if ! [[ "$attempts" =~ ^[0-9]+$ ]] || ((attempts < 1)); then
   echo "AUR_REFRESH_ATTEMPTS must be a positive integer; got: $attempts" >&2
