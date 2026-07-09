@@ -56,7 +56,7 @@ install_build_dependencies() {
   log_info "install_build_tooling" "packages=pacman-contrib,curl,git,sudo,python"
   pacman-key --init
   pacman-key --populate archlinux
-  pacman -Syu --needed --noconfirm pacman-contrib curl git sudo python
+  pacman -Sy --needed --noconfirm pacman-contrib curl git sudo python
 }
 
 ensure_builder_user() {
