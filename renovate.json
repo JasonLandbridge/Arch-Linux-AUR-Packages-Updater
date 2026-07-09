@@ -46,10 +46,10 @@
       "separateMultipleMinor": true
     },
     {
-      "matchPackageNames": [
+      "matchDepNames": [
         "JasonLandbridge/superset"
       ],
-      "extractVersionTemplate": "^desktop-v?(?<version>.*)$"
+      "extractVersionTemplate": "^desktop-v(?<version>.*)$"
     }
   ],
   "customManagers": [
