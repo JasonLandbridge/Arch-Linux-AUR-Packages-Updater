@@ -1,6 +1,6 @@
 # Maintainer: huochenghai <huochenghai@gmail.com>
 pkgname="paseo-desktop-bin"
-pkgver=0.1.94 # renovate: datasource=github-releases depName=JasonLandbridge/paseo
+pkgver=0.1.94 # renovate: datasource=github-releases depName=JasonLandbridge/paseo extractVersion=^v?(?<version>.*)$
 pkgrel=1
 pkgdesc="[CUSTOM JASONLANDBRIDGE] - One interface for all your Claude Code, Codex and OpenCode agents."
 arch=("x86_64")

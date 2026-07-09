@@ -2,7 +2,7 @@
 # Packaging repository: https://github.com/JasonLandbridge/Arch-Linux-AUR-Packages-Updater/tree/main/tabbyml-vulkan-bin
 
 pkgname=tabbyml-vulkan-bin
-pkgver=0.32.0 # renovate: datasource=github-releases depName=TabbyML/tabby
+pkgver=0.32.0 # renovate: datasource=github-releases depName=TabbyML/tabby extractVersion=^v?(?<version>.*)$
 pkgrel=3
 pkgdesc="Self-hosted AI coding assistant (prebuilt Vulkan binary)"
 arch=('x86_64')
