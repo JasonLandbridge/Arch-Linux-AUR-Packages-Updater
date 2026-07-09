@@ -53,7 +53,7 @@
         "/(^|/)PKGBUILD$/"
       ],
       "matchStrings": [
-        "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)(?: extractVersionTemplate=(?<extractVersionTemplate>.*))?"
+        "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: extractVersionTemplate=(?<extractVersionTemplate>.*))?"
       ],
       "extractVersionTemplate": "^v?(?<version>.*)$"
     }
