@@ -22,8 +22,8 @@ source=(
   "LICENSE::https://raw.githubusercontent.com/Brightwing-Systems-LLC/mcp-manager/${_tag}/LICENSE"
 )
 sha256sums=('2452b7f957da68eeffbf82f6d64a2bafde7cfc2869dfd07d9624a1696203048a'
-            '8348ebccf14989f86af9d566d2aa9670d7c2c869126b768c8da751dc52a055c8'
-            '4c07a804124ac523f80aeec2080da96b57b5da1e8d1ce64c0c1e42cbd1eea92a')
+            '7ae01cdfc0b6af9dc6284a6975f3243d2682d688122cb7cd6440faf232ff7d1f'
+            '67dbbe39a64087c5a3d3db93b056389b113e5368818f425097811a9dacc467c8')
 
 package() {
   local _deb_extract_dir="$srcdir/deb-extract"
