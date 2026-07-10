@@ -6,7 +6,7 @@ pkgver=0.3.15 # renovate: datasource=github-tags depName=Brightwing-Systems-LLC/
 pkgrel=4
 pkgdesc="MCP Manager desktop application with Claude Code integration"
 arch=('x86_64')
-url="https://github.com/Brightwing-Systems-LLC/MCP-Manager"
+url="https://github.com/Brightwing-Systems-LLC/mcp-manager"
 license=('Apache-2.0')
 depends=('webkit2gtk-4.1' 'gtk3')
 optdepends=('xdg-utils: open external URLs from the desktop environment')
@@ -14,15 +14,14 @@ provides=('mcp-manager')
 conflicts=('mcp-manager')
 options=('!strip')
 _tag="v${pkgver}"
-_upstream_name="MCP Manager"
-_upstream_name_encoded=${_upstream_name// /%20}
+_upstream_name="Brightwing.MCP.Manager"
 _pkgbase="mcp-manager"
 source=(
-  "${_upstream_name}_${pkgver}_amd64.deb::https://github.com/Brightwing-Systems-LLC/MCP-Manager/releases/download/${_tag}/${_upstream_name_encoded}_${pkgver}_amd64.deb"
+  "${_upstream_name}_${pkgver}_amd64.deb::https://github.com/Brightwing-Systems-LLC/mcp-manager/releases/download/${_tag}/${_upstream_name}_${pkgver}_amd64.deb"
   "${_pkgbase}-bin.desktop"
-  "LICENSE::https://raw.githubusercontent.com/Brightwing-Systems-LLC/MCP-Manager/${_tag}/LICENSE"
+  "LICENSE::https://raw.githubusercontent.com/Brightwing-Systems-LLC/mcp-manager/${_tag}/LICENSE"
 )
-sha256sums=('e1e277793fe972905ff598b2c216aeb3d3a448415752a0b18c1fb4ab39a360e5'
+sha256sums=('2452b7f957da68eeffbf82f6d64a2bafde7cfc2869dfd07d9624a1696203048a'
             '8348ebccf14989f86af9d566d2aa9670d7c2c869126b768c8da751dc52a055c8'
             '4c07a804124ac523f80aeec2080da96b57b5da1e8d1ce64c0c1e42cbd1eea92a')
 
@@ -59,6 +58,6 @@ package() {
   printf '%s\n' \
     'This package repackages the upstream MCP Manager .deb binary for Arch Linux.' \
     'It installs the native dynamic binary instead of the upstream AppImage to avoid Wayland/EGL startup failures.' \
-    'Upstream project: https://github.com/Brightwing-Systems-LLC/MCP-Manager' \
+    'Upstream project: https://github.com/Brightwing-Systems-LLC/mcp-manager' \
     > "$pkgdir/usr/share/licenses/$pkgname/README.Arch"
 }
