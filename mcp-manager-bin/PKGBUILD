@@ -15,9 +15,10 @@ conflicts=('mcp-manager')
 options=('!strip')
 _tag="v${pkgver}"
 _upstream_name="MCP Manager"
+_upstream_name_encoded=${_upstream_name// /%20}
 _pkgbase="mcp-manager"
 source=(
-  "${_upstream_name}_${pkgver}_amd64.deb::https://github.com/Brightwing-Systems-LLC/MCP-Manager/releases/download/${_tag}/${_upstream_name}_${pkgver}_amd64.deb"
+  "${_upstream_name}_${pkgver}_amd64.deb::https://github.com/Brightwing-Systems-LLC/MCP-Manager/releases/download/${_tag}/${_upstream_name_encoded}_${pkgver}_amd64.deb"
   "${_pkgbase}-bin.desktop"
   "LICENSE::https://raw.githubusercontent.com/Brightwing-Systems-LLC/MCP-Manager/${_tag}/LICENSE"
 )
