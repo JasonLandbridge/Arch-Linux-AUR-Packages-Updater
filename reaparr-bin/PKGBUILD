@@ -2,7 +2,7 @@
 # Packaging repository: https://github.com/JasonLandbridge/Arch-Linux-AUR-Packages-Updater/tree/main/reaparr-bin
 
 pkgname=reaparr-bin
-pkgver=0.38.0 # renovate: datasource=github-releases depName=Reaparr/Reaparr extractVersion=^v?(?<version>[0-9]+\.[0-9]+\.[0-9]+)$
+pkgver=0.38.1 # renovate: datasource=github-releases depName=Reaparr/Reaparr versioning=semver-coerced extractVersion=^v?(?<version>[0-9]+\.[0-9]+\.[0-9]+)$
 pkgrel=1
 pkgdesc="Desktop app for browsing and downloading media from Plex"
 arch=('x86_64')
