@@ -53,8 +53,10 @@
         "/(^|/)PKGBUILD$/"
       ],
       "matchStrings": [
-        "pkgver=(?<currentValue>.*) # renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: extractVersion=(?<extractVersion>.*))?"
-      ]
+        "pkgver=(?<currentValue>\\S+) # renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: versioning=(?<versioning>\\S+))?(?: extractVersion=(?<extractVersion>.*))?"
+      ],
+      "currentValueTemplate": "{{{replace '_' '-' currentValue}}}",
+      "autoReplaceStringTemplate": "pkgver={{{replace '-' '_' newValue}}} # renovate: datasource={{{datasource}}} depName={{{depName}}}{{#if versioning}} versioning={{{versioning}}}{{/if}}{{#if extractVersion}} extractVersion={{{extractVersion}}}{{/if}}"
     }
   ]
 }

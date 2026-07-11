@@ -13,6 +13,8 @@ on:
         options:
           - auto
           - sefirah-bin
+          - reaparr-bin
+          - reaparr-dev-bin
           - mcp-linker-bin
           - mcp-manager-bin
           - mcpproxy-bin
