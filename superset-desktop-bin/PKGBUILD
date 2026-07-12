@@ -12,7 +12,7 @@ conflicts=(superset-desktop)
 options=(!strip !debug)
 _appimage="superset-${pkgver}-x86_64.AppImage"
 source=("${_appimage}::https://github.com/JasonLandbridge/superset/releases/download/desktop-v${pkgver}/${_appimage}")
-sha256sums=('c90476f64b9ffa29266d68cc5e9afddae3d718cef10d1e49fba02b918f150a32')
+sha256sums=('60730b3973e00fa480cb4db4299954be4445194504703930937bd42ef28fb61f')
 noextract=("${_appimage}")
 
 prepare() {
