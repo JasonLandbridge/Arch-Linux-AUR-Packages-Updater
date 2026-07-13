@@ -27,23 +27,24 @@ on:
           - superset-desktop-bin
           - qdrant
           - qdrant-bin
-  workflow_run:
-    workflows: ["verify-pkgbuild"]
-    types: [completed]
+  push:
+    branches:
+      - main
+    paths:
+      - '*/PKGBUILD'
+      - '*/.SRCINFO'
 
 permissions:
   contents: read
 
 jobs:
   publish:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout verified commit
+      - name: Checkout publish commit
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 2
-          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
       - name: Select package
         env:

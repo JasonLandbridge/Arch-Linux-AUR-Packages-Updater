@@ -2,12 +2,6 @@ name: updpkgsums
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - '*/PKGBUILD'
-      - '*/.SRCINFO'
   pull_request:
     types:
       - opened
@@ -75,22 +69,10 @@ jobs:
               env.write("\n".join(pkgdirs))
               env.write("\nEOF\n")
           PY
-          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+          else
             git fetch origin main
             mapfile -t pkgdirs < <(
               git diff --name-only origin/main...HEAD -- '*/PKGBUILD' \
-                | xargs -r -n1 dirname \
-                | sort -u
-            )
-
-            {
-              echo 'pkgdirs<<EOF'
-              printf '%s\n' "${pkgdirs[@]}"
-              echo 'EOF'
-            } >> "$GITHUB_ENV"
-          else
-            mapfile -t pkgdirs < <(
-              git diff --name-only HEAD~1 HEAD -- '*/PKGBUILD' \
                 | xargs -r -n1 dirname \
                 | sort -u
             )
