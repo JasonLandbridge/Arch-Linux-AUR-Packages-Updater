@@ -3,7 +3,7 @@
 
 _pkgname=qdrant
 pkgname="${_pkgname}-bin"
-pkgver=1.18.3 # renovate: datasource=github-releases depName=qdrant/qdrant versioning=semver-coerced extractVersion=^v?(?<version>.*)$
+pkgver=1.19.0 # renovate: datasource=github-releases depName=qdrant/qdrant versioning=semver-coerced extractVersion=^v?(?<version>.*)$
 pkgrel=1
 pkgdesc="Vector Database for the next generation of AI applications"
 arch=('x86_64')
