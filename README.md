@@ -9,6 +9,7 @@ This repository is the source of truth for AUR packages maintained by **JasonLan
 - [`mcp-linker-bin`](https://aur.archlinux.org/packages/mcp-linker-bin) - [repo folder](./mcp-linker-bin)
 - [`mcpproxy-bin`](https://aur.archlinux.org/packages/mcpproxy-bin) - [repo folder](./mcpproxy-bin)
 - [`mcp-manager-bin`](https://aur.archlinux.org/packages/mcp-manager-bin) - [repo folder](./mcp-manager-bin)
+- [`github-mcp-server-bin`](https://aur.archlinux.org/packages/github-mcp-server-bin) - [repo folder](./github-mcp-server-bin)
 - [`sefirah-bin`](https://aur.archlinux.org/packages/sefirah-bin) - [repo folder](./sefirah-bin)
 - [`reaparr-bin`](https://aur.archlinux.org/packages/reaparr-bin) - [repo folder](./reaparr-bin)
 - [`reaparr-dev-bin`](https://aur.archlinux.org/packages/reaparr-dev-bin) - [repo folder](./reaparr-dev-bin)

@@ -17,6 +17,7 @@ on:
           - reaparr-dev-bin
           - mcp-linker-bin
           - mcp-manager-bin
+          - github-mcp-server-bin
           - mcpproxy-bin
           - omniroute-bin
           - tabbyml-bin
