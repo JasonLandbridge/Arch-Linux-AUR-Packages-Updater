@@ -99,11 +99,39 @@ jobs:
             cp -a "$workpath/." "$buildroot/"
             chown -R builder:builder "$buildroot"
 
-            sudo -u builder AUR_REFRESH_ATTEMPTS=3 AUR_REFRESH_DELAY_SECONDS=60 bash -lc "
-              set -euxo pipefail
-              cd '$buildroot'
-              bash '$GITHUB_WORKSPACE/.github/scripts/aur-refresh-metadata.sh' .
-            "
+            release_asset_retry_attempts=3
+            release_asset_retry_delay_seconds=600
+
+            for ((attempt = 1; attempt <= release_asset_retry_attempts; attempt++)); do
+              set +e +x
+              output="$(
+                sudo -u builder AUR_REFRESH_ATTEMPTS=3 AUR_REFRESH_DELAY_SECONDS=60 bash -lc "
+                  set -euxo pipefail
+                  cd '$buildroot'
+                  bash '$GITHUB_WORKSPACE/.github/scripts/aur-refresh-metadata.sh' .
+                " 2>&1
+              )"
+              status=$?
+              set -e -x
+              printf '%s\n' "$output"
+
+              if ((status == 0)); then
+                break
+              fi
+
+              if [[ "$output" != *"One or more required GitHub release assets are missing."* ]]; then
+                exit "$status"
+              fi
+
+              if ((attempt == release_asset_retry_attempts)); then
+                echo "::error::Release assets were still unavailable after ${release_asset_retry_attempts} attempts." >&2
+                exit "$status"
+              fi
+
+              next_attempt=$((attempt + 1))
+              echo "::warning::Release assets are not available yet; retrying in ${release_asset_retry_delay_seconds}s (attempt ${next_attempt}/${release_asset_retry_attempts})."
+              sleep "$release_asset_retry_delay_seconds"
+            done
 
             cp -f "$buildroot/PKGBUILD" "$workpath/PKGBUILD"
             cp -f "$buildroot/.SRCINFO" "$workpath/.SRCINFO"
