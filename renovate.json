@@ -44,6 +44,16 @@
       "separateMajorMinor": true,
       "separateMultipleMajor": true,
       "separateMultipleMinor": true
+    },
+    {
+      "matchDatasources": [
+        "github-releases"
+      ],
+      "matchPackageNames": [
+        "Reaparr/Reaparr"
+      ],
+      "ignoreUnstable": false,
+      "respectLatest": false
     }
   ],
   "customManagers": [
