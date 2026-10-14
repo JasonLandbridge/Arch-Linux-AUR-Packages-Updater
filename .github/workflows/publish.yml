@@ -18,6 +18,7 @@ on:
           - mcp-linker-bin
           - mcp-manager-bin
           - github-mcp-server-bin
+          - chrome-for-testing-bin
           - mcpproxy-bin
           - omniroute-bin
           - tabbyml-bin
