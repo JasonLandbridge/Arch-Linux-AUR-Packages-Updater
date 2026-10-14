@@ -10,6 +10,7 @@ This repository is the source of truth for AUR packages maintained by **JasonLan
 - [`mcpproxy-bin`](https://aur.archlinux.org/packages/mcpproxy-bin) - [repo folder](./mcpproxy-bin) - [upstream repo](https://github.com/smart-mcp-proxy/mcpproxy-go)
 - [`mcp-manager-bin`](https://aur.archlinux.org/packages/mcp-manager-bin) - [repo folder](./mcp-manager-bin) - [upstream repo](https://github.com/Brightwing-Systems-LLC/mcp-manager)
 - [`github-mcp-server-bin`](https://aur.archlinux.org/packages/github-mcp-server-bin) - [repo folder](./github-mcp-server-bin) - [upstream repo](https://github.com/github/github-mcp-server)
+- [`chrome-for-testing-bin`](https://aur.archlinux.org/packages/chrome-for-testing-bin) - [repo folder](./chrome-for-testing-bin) - [upstream repo](https://github.com/GoogleChromeLabs/chrome-for-testing)
 - [`sefirah-bin`](https://aur.archlinux.org/packages/sefirah-bin) - [repo folder](./sefirah-bin) - [upstream repo](https://github.com/shrimqy/Sefirah)
 - [`reaparr-bin`](https://aur.archlinux.org/packages/reaparr-bin) - [repo folder](./reaparr-bin) - [upstream repo](https://github.com/Reaparr/Reaparr)
 - [`reaparr-dev-bin`](https://aur.archlinux.org/packages/reaparr-dev-bin) - [repo folder](./reaparr-dev-bin) - [upstream repo](https://github.com/Reaparr/Reaparr)
