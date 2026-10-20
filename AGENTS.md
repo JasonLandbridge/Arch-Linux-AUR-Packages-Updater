@@ -4,6 +4,7 @@
 - This repo is an AUR package source-of-truth repo: Renovate updates `pkgver`, PR CI regenerates checksums and `.SRCINFO`, and merge-to-`main` publishes to AUR.
 - Agents SHOULD trust `renovate.json` and `.github/workflows/` over prose. `README.md` package listings can lag the actual package directories.
 - Repo-local Arch/AUR skills live in `.skills/`. Agents MUST load the relevant repo-local AUR/Arch skills before doing package work.
+- When adding a maintained package, agents MUST first read `.skills/aur-new-package/SKILL.md` and complete its integration checklist.
 
 ## Build And Verification
 - Agents MUST use focused one-shot verification from the package directory being edited: `updpkgsums && makepkg && makepkg --printsrcinfo > .SRCINFO`.
