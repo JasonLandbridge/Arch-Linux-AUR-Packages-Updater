@@ -1,6 +1,6 @@
 pkgbase = qdrant-bin
 	pkgdesc = Vector Database for the next generation of AI applications
-	pkgver = 1.19.2
+	pkgver = 1.20.0
 	pkgrel = 1
 	url = https://qdrant.tech
 	arch = x86_64
@@ -9,7 +9,7 @@ pkgbase = qdrant-bin
 	depends = glibc
 	provides = qdrant
 	conflicts = qdrant
-	source_x86_64 = qdrant-bin-1.19.2.deb::https://github.com/qdrant/qdrant/releases/download/v1.19.2/qdrant_1.19.2-1_amd64.deb
-	sha256sums_x86_64 = c05e56a92fbece506ea7d3d4b56d911d2e905cccf7b7df87465647ee1a1e5f61
+	source_x86_64 = qdrant-bin-1.20.0.deb::https://github.com/qdrant/qdrant/releases/download/v1.20.0/qdrant_1.20.0-1_amd64.deb
+	sha256sums_x86_64 = b5487dd5d1db53442c0b4b24f8d3ed5a22226b8fd4d293b1d620a86329a66f6a
 
 pkgname = qdrant-bin
