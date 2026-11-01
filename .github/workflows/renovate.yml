@@ -26,4 +26,5 @@ jobs:
           LOG_LEVEL: info
         with:
           configurationFile: renovate-self-hosted.js
+          mount-docker-socket: true
           token: ${{ secrets.RENOVATE_TOKEN }}
