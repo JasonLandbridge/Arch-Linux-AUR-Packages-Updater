@@ -2,7 +2,7 @@
 # Packaging repository: https://github.com/JasonLandbridge/Arch-Linux-AUR-Packages-Updater/tree/main/chrome-for-testing-bin
 
 pkgname=chrome-for-testing-bin
-pkgver=155.0.8059.79 # renovate: datasource=custom.chrome-for-testing depName=chrome-for-testing versioning=semver-coerced
+pkgver=155.0.8059.79 # renovate: datasource=custom.chrome-for-testing depName=chrome-for-testing versioning=loose
 pkgrel=2
 pkgdesc="Official Google Chrome for Testing browser"
 arch=('x86_64')
