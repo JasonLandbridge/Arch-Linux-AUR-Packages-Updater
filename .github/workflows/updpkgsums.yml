@@ -99,7 +99,8 @@ jobs:
             cp -a "$workpath/." "$buildroot/"
             chown -R builder:builder "$buildroot"
 
-            release_asset_retry_attempts=3
+            # One immediate attempt, then 18 ten-minute waits (three hours total).
+            release_asset_retry_attempts=19
             release_asset_retry_delay_seconds=600
 
             for ((attempt = 1; attempt <= release_asset_retry_attempts; attempt++)); do
