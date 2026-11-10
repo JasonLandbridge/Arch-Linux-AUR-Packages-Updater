@@ -20,6 +20,7 @@ This repository is the source of truth for AUR packages maintained by **JasonLan
 - [`tabbyml-vulkan-bin`](https://aur.archlinux.org/packages/tabbyml-vulkan-bin) - [repo folder](./tabbyml-vulkan-bin) - [upstream repo](https://github.com/TabbyML/tabby)
 - [`qdrant`](https://aur.archlinux.org/packages/qdrant) - [repo folder](./qdrant) - [upstream repo](https://github.com/qdrant/qdrant)
 - [`qdrant-bin`](https://aur.archlinux.org/packages/qdrant-bin) - [repo folder](./qdrant-bin) - [upstream repo](https://github.com/qdrant/qdrant)
+- [`recompia-bin`](https://aur.archlinux.org/packages/recompia-bin) - [repo folder](./recompia-bin) - [upstream repo](https://github.com/Dittobyte/Recompia)
 
 ## References   
 

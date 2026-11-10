@@ -30,6 +30,7 @@ on:
           - superset-desktop-bin
           - qdrant
           - qdrant-bin
+          - recompia-bin
   push:
     branches:
       - main
