@@ -31,6 +31,8 @@ on:
           - qdrant
           - qdrant-bin
           - recompia-bin
+          - open-webui
+          - hadolint-git
   push:
     branches:
       - main

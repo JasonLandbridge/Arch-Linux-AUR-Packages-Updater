@@ -107,5 +107,13 @@ check_github_release_assets() {
 
 check_github_release_assets
 run_with_retry "Updating checksums on PKGBUILD" updpkgsums
-run_with_retry "Verifying source availability and checksums" makepkg --nobuild --nodeps --verifysource
+
+if grep -Eq '^[[:space:]]*pkgver[[:space:]]*\(\)' PKGBUILD; then
+  # --nobuild extracts sources and runs pkgver() without running build(), which keeps
+  # metadata refreshes cheap for VCS packages with expensive language toolchains.
+  run_with_retry "Refreshing package version and source metadata" makepkg --nobuild --nodeps
+else
+  run_with_retry "Verifying source availability and checksums" makepkg --nobuild --nodeps --verifysource
+fi
+
 makepkg --printsrcinfo > .SRCINFO

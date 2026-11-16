@@ -133,9 +133,11 @@ jobs:
         shell: bash
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
-      - name: Test publishing scripts
+      - name: Test automation scripts
         shell: bash
-        run: bash .github/tests/test-publishing.sh
+        run: |
+          bash .github/tests/test-publishing.sh
+          bash .github/tests/test-renovate-aur-refresh.sh
 
       - name: Verify PKGBUILD sources and SRCINFO
         id: verify

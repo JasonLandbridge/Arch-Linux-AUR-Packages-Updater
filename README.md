@@ -21,6 +21,8 @@ This repository is the source of truth for AUR packages maintained by **JasonLan
 - [`qdrant`](https://aur.archlinux.org/packages/qdrant) - [repo folder](./qdrant) - [upstream repo](https://github.com/qdrant/qdrant)
 - [`qdrant-bin`](https://aur.archlinux.org/packages/qdrant-bin) - [repo folder](./qdrant-bin) - [upstream repo](https://github.com/qdrant/qdrant)
 - [`recompia-bin`](https://aur.archlinux.org/packages/recompia-bin) - [repo folder](./recompia-bin) - [upstream repo](https://github.com/Dittobyte/Recompia)
+- [`open-webui`](https://aur.archlinux.org/packages/open-webui) - [repo folder](./open-webui) - [upstream repo](https://github.com/open-webui/open-webui)
+- [`hadolint-git`](https://aur.archlinux.org/packages/hadolint-git) - [repo folder](./hadolint-git) - [upstream repo](https://github.com/hadolint/hadolint)
 
 ## References   
 

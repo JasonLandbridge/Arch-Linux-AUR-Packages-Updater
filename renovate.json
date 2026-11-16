@@ -57,7 +57,8 @@
     },
     {
       "matchDatasources": [
-        "custom.chrome-for-testing"
+        "custom.chrome-for-testing",
+        "git-refs"
       ],
       "postUpgradeTasks": {
         "commands": [
@@ -91,6 +92,15 @@
       ],
       "currentValueTemplate": "{{{replace '_' '-' currentValue}}}",
       "autoReplaceStringTemplate": "pkgver={{{replace '-' '_' newValue}}} # renovate: datasource={{{datasource}}} depName={{{depName}}}{{#if versioning}} versioning={{{versioning}}}{{/if}}{{#if extractVersion}} extractVersion={{{extractVersion}}}{{/if}}\npkgrel=1"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/(^|/)PKGBUILD$/"
+      ],
+      "matchStrings": [
+        "_commit=(?<currentDigest>[0-9a-f]{40}) # renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+) branch=(?<currentValue>\\S+)"
+      ]
     }
   ]
 }

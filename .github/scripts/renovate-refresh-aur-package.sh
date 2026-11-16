@@ -26,7 +26,7 @@ docker run --rm \
   -w /repo \
   archlinux:base-devel \
   bash -lc "set -euo pipefail
-pacman -Syu --noconfirm --needed pacman-contrib sudo
+pacman -Syu --noconfirm --needed pacman-contrib sudo git
 useradd --create-home --shell /bin/bash --uid '$(id -u)' builder
 chown -R builder:builder '$pkgdir'
 sudo -u builder AUR_REFRESH_ATTEMPTS=3 AUR_REFRESH_DELAY_SECONDS=60 bash .github/scripts/aur-refresh-metadata.sh '$pkgdir'"
