@@ -13,7 +13,7 @@ depends=('gcc-libs' 'glibc')
 provides=($_pkgname)
 conflicts=($_pkgname)
 source_x86_64=("${pkgname}-${pkgver}.deb::https://github.com/qdrant/qdrant/releases/download/v${pkgver}/qdrant_${pkgver}-1_amd64.deb")
-sha256sums_x86_64=('a8dd3d716f2261aef46bf373d667cca106b46fbb7594e8ae29157e4752c75da5')
+sha256sums_x86_64=('de7025419690bd9ba4d0611f9804d1bbb11752482fb2af12ba8668bf94dd5296')
 
 package() {
   tar -xf data.tar.xz
