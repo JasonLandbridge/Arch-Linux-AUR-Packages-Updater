@@ -137,13 +137,12 @@ jobs:
             cp -f "$buildroot/PKGBUILD" "$workpath/PKGBUILD"
             cp -f "$buildroot/.SRCINFO" "$workpath/.SRCINFO"
           done
-
       - name: Commit
         if: ${{ env.pkgdirs != '' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
         uses: stefanzweifel/git-auto-commit-action@d0b01107b5db882071f96de5dd4b54961ea93f4c # v7.2.1
         with:
           file_pattern: '*/PKGBUILD */.SRCINFO'
-          commit_message: 'chore: refresh PKGBUILD checksums and SRCINFO'
+          commit_message: 'chore: refresh PKGBUILD checksums and SRCINFO [skip actions]'
           commit_user_name: JasonLandbridge
           commit_user_email: 15127381+JasonLandbridge@users.noreply.github.com
           commit_author: JasonLandbridge <15127381+JasonLandbridge@users.noreply.github.com>
