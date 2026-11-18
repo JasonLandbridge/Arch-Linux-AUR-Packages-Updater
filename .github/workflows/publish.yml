@@ -32,6 +32,7 @@ on:
           - qdrant-bin
           - recompia-bin
           - open-webui
+          - presenton-bin
           - hadolint-git
   push:
     branches:
