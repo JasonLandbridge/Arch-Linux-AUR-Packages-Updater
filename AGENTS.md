@@ -17,6 +17,7 @@
 - Each maintained package directory MUST contain both `PKGBUILD` and `.SRCINFO`.
 - Root-level package assets may be consumed by package builds; for example `youtube-dl-gui/PKGBUILD` references `../../electron-builder.yml`.
 - When a package is added or removed, agents MUST update `README.md` in the same change.
+- The maintained package list in `README.md` MUST remain in alphabetical order by package name; agents MUST preserve this order when adding, removing, or renaming packages.
 - Application packages SHOULD ship a `systemd --user` service when auto-start/background use is part of the package workflow. Existing repo examples are `mcpproxy-bin` and `omniroute-bin`, which install units to `/usr/lib/systemd/user/*.service`.
 - Keep `PKGBUILD` files lean: put user-facing units, launchers, environment files, desktop files, and sample/default config files in separate package-directory files, then list them in `source=()` and install them from `$srcdir`. Do not embed long heredocs in `PKGBUILD` when a separate file would be clearer.
 - For user-service packages with runtime configuration, prefer the `omniroute-bin` pattern: ship the service file separately, ship default user-editable config/env files under `/usr/share/doc/$pkgname/`, add a `<pkgname>.install` hook when appropriate to best-effort copy defaults into the invoking user's `${XDG_CONFIG_HOME:-$HOME/.config}/<app>/` with `cp -n`, and never overwrite user edits on upgrade.
