@@ -32,7 +32,6 @@ on:
           - qdrant-bin
           - recompia-bin
           - open-webui
-          - proc
           - spyglass-bin
           - presenton-bin
           - hadolint-bin

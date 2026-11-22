@@ -15,7 +15,6 @@ This repository is the source of truth for AUR packages maintained by **JasonLan
 - [`omniroute-bin`](https://aur.archlinux.org/packages/omniroute-bin) - [repo folder](./omniroute-bin) - [upstream repo](https://github.com/diegosouzapw/OmniRoute)
 - [`open-webui`](https://aur.archlinux.org/packages/open-webui) - [repo folder](./open-webui) - [upstream repo](https://github.com/open-webui/open-webui)
 - [`presenton-bin`](https://aur.archlinux.org/packages/presenton-bin) - [repo folder](./presenton-bin) - [upstream repo](https://github.com/presenton/presenton)
-- [`proc`](https://aur.archlinux.org/packages/proc) - [repo folder](./proc) - [upstream repo](https://github.com/yazeed/proc-cli)
 - [`qdrant`](https://aur.archlinux.org/packages/qdrant) - [repo folder](./qdrant) - [upstream repo](https://github.com/qdrant/qdrant)
 - [`qdrant-bin`](https://aur.archlinux.org/packages/qdrant-bin) - [repo folder](./qdrant-bin) - [upstream repo](https://github.com/qdrant/qdrant)
 - [`reaparr-bin`](https://aur.archlinux.org/packages/reaparr-bin) - [repo folder](./reaparr-bin) - [upstream repo](https://github.com/Reaparr/Reaparr)
