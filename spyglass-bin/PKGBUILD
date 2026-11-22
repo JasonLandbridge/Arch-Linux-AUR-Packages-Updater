@@ -1,0 +1,34 @@
+# Maintainer: JasonLandbridge
+# Packaging repository: https://github.com/JasonLandbridge/Arch-Linux-AUR-Packages-Updater/tree/main/spyglass-bin
+
+pkgname=spyglass-bin
+pkgver=24.11.1 # renovate: datasource=github-releases depName=spyglass-search/spyglass versioning=semver-coerced extractVersion=^v20(?<version>.*)$
+pkgrel=1
+pkgdesc="A personal search engine that indexes what you want, exposing it to you in a simple & fast interface"
+arch=('x86_64')
+url="https://github.com/spyglass-search/spyglass"
+license=('AGPL-3.0-or-later')
+depends=('fontconfig' 'gcc-libs' 'glibc' 'gtk3' 'libayatana-appindicator' 'openssl' 'webkit2gtk-4.1')
+makedepends=('libarchive')
+provides=('spyglass')
+conflicts=('spyglass')
+options=('!strip')
+
+source=(
+  "spyglass-${pkgver}.deb::${url}/releases/download/v20${pkgver}/Spyglass_${pkgver}_amd64.deb"
+  "LICENSE::https://raw.githubusercontent.com/spyglass-search/spyglass/v20${pkgver}/LICENSE"
+)
+sha256sums=(
+  'e06a1dd4caf8da6a6b1aa64f05e8703df1300a9915f7ba1f96b5ed49ec4e3b24'
+  '0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0'
+)
+
+package() {
+  bsdtar -xOf "${srcdir}/spyglass-${pkgver}.deb" data.tar.gz | bsdtar -xf - -C "${pkgdir}"
+
+  install -Dm644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+  install -Dm755 "${pkgdir}/usr/bin/Spyglass" "${pkgdir}/usr/bin/spyglass"
+  rm "${pkgdir}/usr/bin/Spyglass"
+  mv "${pkgdir}/usr/share/applications/Spyglass.desktop" "${pkgdir}/usr/share/applications/spyglass.desktop"
+  sed -i 's/^Exec=Spyglass$/Exec=spyglass/' "${pkgdir}/usr/share/applications/spyglass.desktop"
+}

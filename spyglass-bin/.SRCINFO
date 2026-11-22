@@ -1,0 +1,24 @@
+pkgbase = spyglass-bin
+	pkgdesc = A personal search engine that indexes what you want, exposing it to you in a simple & fast interface
+	pkgver = 24.11.1
+	pkgrel = 1
+	url = https://github.com/spyglass-search/spyglass
+	arch = x86_64
+	license = AGPL-3.0-or-later
+	makedepends = libarchive
+	depends = fontconfig
+	depends = gcc-libs
+	depends = glibc
+	depends = gtk3
+	depends = libayatana-appindicator
+	depends = openssl
+	depends = webkit2gtk-4.1
+	provides = spyglass
+	conflicts = spyglass
+	options = !strip
+	source = spyglass-24.11.1.deb::https://github.com/spyglass-search/spyglass/releases/download/v2024.11.1/Spyglass_24.11.1_amd64.deb
+	source = LICENSE::https://raw.githubusercontent.com/spyglass-search/spyglass/v2024.11.1/LICENSE
+	sha256sums = e06a1dd4caf8da6a6b1aa64f05e8703df1300a9915f7ba1f96b5ed49ec4e3b24
+	sha256sums = 0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+
+pkgname = spyglass-bin
