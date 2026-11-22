@@ -99,8 +99,14 @@ jobs:
           fi
 
           if [[ -n "$pkgbuild" && ! -f "$pkgbuild/PKGBUILD" ]]; then
-            echo "Package directory does not contain a PKGBUILD: $pkgbuild" >&2
-            exit 1
+            if [[ "$selection" == "Automatically detected" ]] \
+              && git cat-file -e "$base:$pkgbuild/PKGBUILD" 2>/dev/null; then
+              echo "Automatically detected package was removed; skipping publication: $pkgbuild"
+              pkgbuild=""
+            else
+              echo "Package directory does not contain a PKGBUILD: $pkgbuild" >&2
+              exit 1
+            fi
           fi
 
           echo "pkgbuild=$pkgbuild" >> "$GITHUB_ENV"
