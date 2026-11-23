@@ -5,6 +5,7 @@ This repository is the source of truth for AUR packages maintained by **JasonLan
 ## Maintained packages
 
 - [`chrome-for-testing-bin`](https://aur.archlinux.org/packages/chrome-for-testing-bin) - [repo folder](./chrome-for-testing-bin) - [upstream repo](https://github.com/GoogleChromeLabs/chrome-for-testing)
+- [`dcg`](https://aur.archlinux.org/packages/dcg) - [repo folder](./dcg) - [upstream repo](https://github.com/Dicklesworthstone/destructive_command_guard)
 - [`edikt-bin`](https://aur.archlinux.org/packages/edikt-bin) - [repo folder](./edikt-bin) - [upstream repo](https://github.com/jhheider/edikt)
 - [`github-mcp-server-bin`](https://aur.archlinux.org/packages/github-mcp-server-bin) - [repo folder](./github-mcp-server-bin) - [upstream repo](https://github.com/github/github-mcp-server)
 - [`hadolint-bin`](https://aur.archlinux.org/packages/hadolint-bin) - [repo folder](./hadolint-bin) - [upstream repo](https://github.com/hadolint/hadolint)

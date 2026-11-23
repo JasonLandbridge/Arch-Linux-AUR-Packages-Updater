@@ -19,6 +19,7 @@ on:
           - mcp-manager-bin
           - github-mcp-server-bin
           - chrome-for-testing-bin
+          - dcg
           - edikt-bin
           - mcpproxy-bin
           - omniroute-bin
