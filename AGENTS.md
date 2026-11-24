@@ -6,6 +6,9 @@
 - Repo-local Arch/AUR skills live in `.skills/`. Agents MUST load the relevant repo-local AUR/Arch skills before doing package work.
 - When adding a maintained package, agents MUST first read `.skills/aur-new-package/SKILL.md` and complete its integration checklist.
 
+## AUR Package Comments
+- After a public package is published, agents MUST provide its standard updater comment in the final chat response as a fenced `markdown` code block, preserving raw copyable Markdown, with a direct AUR package link outside the block. Customize the package name and repository-folder URL. If posting/pinning was not performed, state that clearly.
+
 ## Build And Verification
 - Agents MUST use focused one-shot verification from the package directory being edited: `updpkgsums && makepkg && makepkg --printsrcinfo > .SRCINFO`.
 - Agents SHOULD verify only the touched package. CI is package-scoped and does not run a repo-wide build/test suite.
