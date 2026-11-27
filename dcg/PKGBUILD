@@ -2,7 +2,7 @@
 # Packaging repository: https://github.com/JasonLandbridge/Arch-Linux-AUR-Packages-Updater/tree/main/dcg
 
 pkgname=dcg
-pkgver=0.17.1 # renovate: datasource=github-releases depName=Dicklesworthstone/destructive_command_guard
+pkgver=0.17.2 # renovate: datasource=github-releases depName=Dicklesworthstone/destructive_command_guard versioning=semver-coerced
 pkgrel=1
 pkgdesc="A hook that blocks destructive commands before AI coding agents run them"
 arch=('x86_64')
